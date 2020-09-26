@@ -350,4 +350,8 @@ body {
 * {
   box-sizing: border-box;
 }
+
+.board {
+  display: flex;
+}
 /*# sourceMappingURL=style.css.map */
