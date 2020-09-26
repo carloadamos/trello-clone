@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
+/**
+ * Reorder items in same list.
+ * @param {Array} list List
+ * @param {number} startIndex Index
+ * @param {number} endIndex Index
+ */
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
-  console.log(result)
   const [removed] = result.splice(startIndex, 1);
   result.splice(endIndex, 0, removed);
-
-  console.log(result)
-  console.log(removed)
 
   return result;
 };
@@ -29,13 +31,13 @@ const move = (source, destination, droppableSource, droppableDestination) => {
 
   return result;
 };
+
 const grid = 8;
 const getListStyle = isDraggingOver => ({
   background: isDraggingOver ? 'lightblue' : 'lightgrey',
   padding: grid,
   width: 250
 });
-
 const getItemStyle = (isDragging, draggableStyle) => ({
   // some basic styles to make the items look a bit nicer
   userSelect: 'none',
@@ -54,23 +56,24 @@ export default class Board extends Component {
     super();
 
     this.state = {
-      list1: [
-        { id: 'one', content: 'one', },
-        { id: 'two', content: 'two' },
-        { id: 'three', content: 'three' }],
-      list2: [
-        { id: 'four', content: 'four', },
-        { id: 'five', content: 'five' },
-        { id: 'six', content: 'six' }],
+      list: [
+        {
+          title: 'Things To Do',
+          items: [
+            { id: 'one', content: 'one', },
+            { id: 'two', content: 'two' },
+            { id: 'three', content: 'three' }],
+        },
+        {
+          title: 'Doing',
+          items: [
+            { id: 'four', content: 'four', },
+            { id: 'five', content: 'five' },
+            { id: 'six', content: 'six' }]
+        },
+      ],
     };
   }
-
-  id2List = {
-    droppable1: 'list1',
-    droppable2: 'list2'
-  };
-
-  getList = id => this.state[this.id2List[id]];
 
   onDragEnd = result => {
     const { source, destination } = result;
@@ -81,30 +84,33 @@ export default class Board extends Component {
     }
 
     if (source.droppableId === destination.droppableId) {
-      const list1 = reorder(
-        this.getList(source.droppableId),
+      const list = reorder(
+        this.state.list[source.droppableId].items,
         source.index,
         destination.index
       );
 
-      let state = { list1 };
+      let temporaryList = this.state.list;
 
-      if (source.droppableId === 'droppable2') {
-        state = { list2: list1 };
-      }
+      temporaryList[source.droppableId].items = list;
 
-      this.setState(state);
+      this.setState({
+        list: temporaryList,
+      });
     } else {
-      const result = move(
-        this.getList(source.droppableId),
-        this.getList(destination.droppableId),
+      const list = move(
+        this.state.list[source.droppableId].items,
+        this.state.list[destination.droppableId].items,
         source,
         destination
       );
 
+      let temporaryList = this.state.list;
+      temporaryList[source.droppableId].items = list[source.droppableId];
+      temporaryList[destination.droppableId].items = list[destination.droppableId];
+
       this.setState({
-        list1: result.droppable1,
-        list2: result.droppable2
+        list: temporaryList,
       });
     }
   };
@@ -112,14 +118,14 @@ export default class Board extends Component {
   render() {
     return (
       <DragDropContext onDragEnd={this.onDragEnd}>
-        <Droppable droppableId="droppable1">
+        <Droppable droppableId="0">
           {(provided, snapshot) => (
             <div
               ref={provided.innerRef}
               style={getListStyle(snapshot.isDraggingOver)}
               {...provided.droppableProps}
               className="card-list">
-              {this.state.list1.map((item, index) => (
+              {this.state.list[0].items.map((item, index) => (
                 <Draggable
                   key={item.id}
                   draggableId={item.id}
@@ -143,14 +149,14 @@ export default class Board extends Component {
             </div>
           )}
         </Droppable>
-        <Droppable droppableId="droppable2">
+        <Droppable droppableId="1">
           {(provided, snapshot) => (
             <div
               ref={provided.innerRef}
               style={getListStyle(snapshot.isDraggingOver)}
               {...provided.droppableProps}
               className="card-list">
-              {this.state.list2.map((item, index) => (
+              {this.state.list[1].items.map((item, index) => (
                 <Draggable
                   key={item.id}
                   draggableId={item.id}
