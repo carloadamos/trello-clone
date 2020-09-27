@@ -24,24 +24,15 @@ export default class Board extends Component {
       list: [
         {
           title: 'Things To Do',
-          items: [
-            { id: 'one', content: 'one', },
-            { id: 'two', content: 'two' },
-            { id: 'three', content: 'three' }],
+          items: [],
         },
         {
           title: 'Doing',
-          items: [
-            { id: 'four', content: 'four', },
-            { id: 'five', content: 'five' },
-            { id: 'six', content: 'six' }]
+          items: []
         },
         {
           title: 'Done',
-          items: [
-            { id: 'seven', content: 'seven', },
-            { id: 'eight', content: 'eight' },
-            { id: 'nine', content: 'nine' }]
+          items: []
         },
       ],
     };

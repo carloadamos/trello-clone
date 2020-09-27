@@ -18,7 +18,9 @@ connection.once('open', () => {
 });
 
 const taskRouter = require('./routes/task.route');
+const listRouter = require('./routes/list.route');
 app.use('/task', taskRouter);
+app.use('/list', listRouter);
 
 app.listen(port, () => {
   console.log(`Trello Clone Server is running on port: ${port}`)
