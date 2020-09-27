@@ -2,23 +2,22 @@
   background-color: white;
   border-radius: 4px;
   color: black;
-  /* display: inline-block; */
-  /* margin: 0.5rem;
+  margin: 1.5rem;
   min-width: 15rem;
-  padding: 0.5rem; */
+  padding: 0.5rem;
 }
 
-/* .card-list__header {
+.card-list__header {
   background-color: gray;
-} */
+}
 
-/* .card-list__content {
+.card-list__content {
   background-color: hotpink;
-} */
-/* 
+}
+
 .card-list__item {
   background-color: white;
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   border-radius: 4px;
   margin: 0.5rem 0;
   padding: 0.1rem;
@@ -28,7 +27,7 @@
   margin: 0.5rem 0;
 }
 
-.card-list__another:hover {
-  background-color: rgba(0,0,0,0.1);
+.card-list__add:hover {
+  background-color: rgba(0, 0, 0, 0.1);
   cursor: pointer;
-} */
+}

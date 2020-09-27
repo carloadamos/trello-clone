@@ -53,8 +53,27 @@ export default class Board extends Component {
             { id: 'five', content: 'five' },
             { id: 'six', content: 'six' }]
         },
+        {
+          title: 'Done',
+          items: [
+            { id: 'seven', content: 'seven', },
+            { id: 'eight', content: 'eight' },
+            { id: 'nine', content: 'nine' }]
+        },
       ],
     };
+  }
+
+  addItem = (listIndex, item) => {
+    let temporaryList = this.state.list;
+
+    item = {
+      id: item,
+      content: item,
+    };
+    temporaryList[listIndex].items = [...temporaryList[listIndex].items, item];
+
+    this.setState({ list: temporaryList });
   }
 
   onDragEnd = result => {
@@ -100,9 +119,11 @@ export default class Board extends Component {
   render() {
     return (
       <div className="board">
-        <DragDropContext onDragEnd={this.onDragEnd}>
+        <DragDropContext
+          onDragEnd={this.onDragEnd}>
           {this.state.list.map((listItem, index) => (
             <CardList
+              addItem={this.addItem}
               key={index}
               index={index}
               listItem={listItem}
