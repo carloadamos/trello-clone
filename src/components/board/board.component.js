@@ -16,23 +16,6 @@ const reorder = (list, startIndex, endIndex) => {
   return result;
 };
 
-/**
- * Moves an item from one list to another list.
- */
-const move = (source, destination, droppableSource, droppableDestination) => {
-  const sourceClone = Array.from(source);
-  const destClone = Array.from(destination);
-  const [removed] = sourceClone.splice(droppableSource.index, 1);
-
-  destClone.splice(droppableDestination.index, 0, removed);
-
-  const result = {};
-  result[droppableSource.droppableId] = sourceClone;
-  result[droppableDestination.droppableId] = destClone;
-
-  return result;
-};
-
 export default class Board extends Component {
   constructor() {
     super();
@@ -64,6 +47,23 @@ export default class Board extends Component {
     };
   }
 
+  /**
+   * Moves an item from one list to another list.
+   */
+  move = (source, destination, droppableSource, droppableDestination) => {
+    const sourceClone = Array.from(source);
+    const destClone = Array.from(destination);
+    const [removed] = sourceClone.splice(droppableSource.index, 1);
+
+    destClone.splice(droppableDestination.index, 0, removed);
+
+    const result = {};
+    result[droppableSource.droppableId] = sourceClone;
+    result[droppableDestination.droppableId] = destClone;
+
+    return result;
+  };
+
   addItem = (listIndex, item) => {
     let temporaryList = this.state.list;
 
@@ -71,10 +71,31 @@ export default class Board extends Component {
       id: item,
       content: item,
     };
+
+    if (this.exists(temporaryList, item)) return
+
     temporaryList[listIndex].items = [...temporaryList[listIndex].items, item];
 
     this.setState({ list: temporaryList });
   }
+
+  /**
+   * Checks if item exists in the whole list.
+   * @param {Array} list Prop list
+   * @param {Object} newItem Item to add
+   */
+  exists = (list, newItem) => {
+    let item, itemObj;
+
+    for (itemObj of list) {
+      for (item of itemObj.items) {
+        if (item.id === newItem.id) {
+          console.error('Item exists somewhere!')
+          return true;
+        }
+      }
+    }
+  };
 
   onDragEnd = result => {
     const { source, destination } = result;
@@ -99,7 +120,7 @@ export default class Board extends Component {
         list: temporaryList,
       });
     } else {
-      const list = move(
+      const list = this.move(
         this.state.list[source.droppableId].items,
         this.state.list[destination.droppableId].items,
         source,
