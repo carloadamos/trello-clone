@@ -46,13 +46,13 @@ export default class Board extends Component {
         {this.state.addList ? (
           <input type="text" onKeyDown={this._handleKeyDown} />
         ) : (
-          <button
-            className="board__add-list"
-            onClick={() => this.setState({ addList: true })}
-          >
-            Add list
-          </button>
-        )}
+            <button
+              className="board__add-list"
+              onClick={() => this.setState({ addList: true })}
+            >
+              Add list
+            </button>
+          )}
       </div>
     );
   }
@@ -64,6 +64,8 @@ export default class Board extends Component {
    */
   addItem = (listIndex, item) => {
     let temporaryList = this.state.list;
+
+    if (!item) return;
 
     item = {
       id: item,
@@ -83,6 +85,8 @@ export default class Board extends Component {
    * @param {String} title Title of new list.
    */
   addList = (title) => {
+    if (!title) return;
+
     axios
       .post("http://localhost:5000/list/add", { title })
       .then((response) => {
