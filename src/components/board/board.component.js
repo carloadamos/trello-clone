@@ -1,30 +1,28 @@
-import React, { Component } from 'react';
-import { DragDropContext } from 'react-beautiful-dnd';
-import CardList from '../card-list/card-list.component';
-import axios from 'axios';
+import React, { Component } from "react";
+import { DragDropContext } from "react-beautiful-dnd";
+import CardList from "../card-list/card-list.component";
+import axios from "axios";
+
+import "./board.style.css";
 
 export default class Board extends Component {
   constructor() {
     super();
 
     this.state = {
+      addList: false,
       list: [],
     };
   }
 
   componentDidMount() {
-    axios.get(`http://localhost:5000/list`)
-      .then(response => {
-        this.setState({ list: response.data })
-      })
-      .catch(err => console.error(`Error fetching data: ${err}`));
+    this._fetchTaskList();
   }
 
   render() {
     return (
       <div className="board">
-        <DragDropContext
-          onDragEnd={this.onDragEnd}>
+        <DragDropContext onDragEnd={this.onDragEnd}>
           {this.state.list.map((listItem, index) => (
             <CardList
               addItem={this.addItem}
@@ -34,6 +32,27 @@ export default class Board extends Component {
             />
           ))}
         </DragDropContext>
+        {this._renderAddList()}
+      </div>
+    );
+  }
+
+  /**
+   * Render add button and text field.
+   */
+  _renderAddList() {
+    return (
+      <div>
+        {this.state.addList ? (
+          <input type="text" onKeyDown={this._handleKeyDown} />
+        ) : (
+          <button
+            className="board__add-list"
+            onClick={() => this.setState({ addList: true })}
+          >
+            Add list
+          </button>
+        )}
       </div>
     );
   }
@@ -51,13 +70,28 @@ export default class Board extends Component {
       description: item,
     };
 
-    if (this.exists(temporaryList, item)) return
+    if (this.exists(temporaryList, item)) return;
 
     temporaryList[listIndex].tasks = [...temporaryList[listIndex].tasks, item];
 
     this.setState({ list: temporaryList });
-    this.updateList(temporaryList[listIndex])
-  }
+    this.updateList(temporaryList[listIndex]);
+  };
+
+  /**
+   * Add new list.
+   * @param {String} title Title of new list.
+   */
+  addList = (title) => {
+    axios
+      .post("http://localhost:5000/list/add", { title })
+      .then((response) => {
+        if (response.status === 200) {
+          this._fetchTaskList();
+        }
+      })
+      .catch((err) => console.error(err));
+  };
 
   /**
    * Checks if item exists in the whole list.
@@ -70,12 +104,39 @@ export default class Board extends Component {
     for (itemObj of list) {
       for (item of itemObj.tasks) {
         if (item.id === newItem.id) {
-          console.error('Item exists somewhere!')
+          console.error("Item exists somewhere!");
           return true;
         }
       }
     }
   };
+
+  /**
+   * Kydown handler.
+   * @param {Object} event Event object.
+   */
+  _handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      this.addList(event.target.value);
+      this.setState({ addList: false });
+    }
+
+    if (event.key === "Escape") {
+      this.setState({ addList: false });
+    }
+  };
+
+  /**
+   * Fetch task list.
+   */
+  _fetchTaskList() {
+    axios
+      .get(`http://localhost:5000/list`)
+      .then((response) => {
+        this.setState({ list: response.data });
+      })
+      .catch((err) => console.error(`Error fetching data: ${err}`));
+  }
 
   /**
    * Moves an item from one list to another list.
@@ -98,13 +159,11 @@ export default class Board extends Component {
    * Set of procedure to perform when draggin ends.
    * @param {Object} result Result of dragging
    */
-  onDragEnd = result => {
+  onDragEnd = (result) => {
     const { source, destination } = result;
 
     // dropped outside the list
-    if (!destination) {
-      return;
-    }
+    if (!destination) return;
 
     if (source.droppableId === destination.droppableId) {
       const list = this.reorder(
@@ -112,14 +171,11 @@ export default class Board extends Component {
         source.index,
         destination.index
       );
-
       let temporaryList = this.state.list;
 
       temporaryList[source.droppableId].tasks = list;
-
-      this.setState({
-        list: temporaryList,
-      });
+      this.setState({ list: temporaryList });
+      this.updateList(temporaryList[source.droppableId]);
     } else {
       const list = this.move(
         this.state.list[source.droppableId].tasks,
@@ -127,16 +183,14 @@ export default class Board extends Component {
         source,
         destination
       );
-
       let temporaryList = this.state.list;
-      temporaryList[source.droppableId].tasks = list[source.droppableId];
-      temporaryList[destination.droppableId].tasks = list[destination.droppableId];
 
-      this.setState({
-        list: temporaryList,
-      });
-      this.updateList(temporaryList[source.droppableId])
-      this.updateList(temporaryList[destination.droppableId])
+      temporaryList[source.droppableId].tasks = list[source.droppableId];
+      temporaryList[destination.droppableId].tasks =
+        list[destination.droppableId];
+      this.setState({ list: temporaryList });
+      this.updateList(temporaryList[source.droppableId]);
+      this.updateList(temporaryList[destination.droppableId]);
     }
   };
 
@@ -159,8 +213,8 @@ export default class Board extends Component {
    * @param {Array} list Task list array.
    */
   updateList = (list) => {
-    axios.put(`http://localhost:5000/list/update/${list._id}`, list)
-      .then(response => console.log(response))
-      .catch(err => console.error(`Error fetching data: ${err}`));
-  }
+    axios
+      .put(`http://localhost:5000/list/update/${list._id}`, list)
+      .catch((err) => console.error(`Error fetching data: ${err}`));
+  };
 }
