@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { DragDropContext } from 'react-beautiful-dnd';
 import CardList from '../card-list/card-list.component';
+import axios from 'axios';
 
 /**
  * Reorder items in same list.
@@ -22,20 +23,28 @@ export default class Board extends Component {
 
     this.state = {
       list: [
-        {
-          title: 'Things To Do',
-          items: [],
-        },
-        {
-          title: 'Doing',
-          items: []
-        },
-        {
-          title: 'Done',
-          items: []
-        },
+        // {
+        //   title: 'Things To Do',
+        //   items: [],
+        // },
+        // {
+        //   title: 'Doing',
+        //   items: []
+        // },
+        // {
+        //   title: 'Done',
+        //   items: []
+        // },
       ],
     };
+  }
+
+  componentDidMount() {
+    axios.get(`http://localhost:5000/list`)
+      .then(response => {
+        this.setState({ list: response.data })
+      })
+      .catch(err => console.error(`Error fetching data: ${err}`))
   }
 
   /**
@@ -65,7 +74,7 @@ export default class Board extends Component {
 
     if (this.exists(temporaryList, item)) return
 
-    temporaryList[listIndex].items = [...temporaryList[listIndex].items, item];
+    temporaryList[listIndex].tasks = [...temporaryList[listIndex].tasks, item];
 
     this.setState({ list: temporaryList });
   }
@@ -79,7 +88,7 @@ export default class Board extends Component {
     let item, itemObj;
 
     for (itemObj of list) {
-      for (item of itemObj.items) {
+      for (item of itemObj.tasks) {
         if (item.id === newItem.id) {
           console.error('Item exists somewhere!')
           return true;
@@ -98,29 +107,29 @@ export default class Board extends Component {
 
     if (source.droppableId === destination.droppableId) {
       const list = reorder(
-        this.state.list[source.droppableId].items,
+        this.state.list[source.droppableId].tasks,
         source.index,
         destination.index
       );
 
       let temporaryList = this.state.list;
 
-      temporaryList[source.droppableId].items = list;
+      temporaryList[source.droppableId].tasks = list;
 
       this.setState({
         list: temporaryList,
       });
     } else {
       const list = this.move(
-        this.state.list[source.droppableId].items,
-        this.state.list[destination.droppableId].items,
+        this.state.list[source.droppableId].tasks,
+        this.state.list[destination.droppableId].tasks,
         source,
         destination
       );
 
       let temporaryList = this.state.list;
-      temporaryList[source.droppableId].items = list[source.droppableId];
-      temporaryList[destination.droppableId].items = list[destination.droppableId];
+      temporaryList[source.droppableId].tasks = list[source.droppableId];
+      temporaryList[destination.droppableId].tasks = list[destination.droppableId];
 
       this.setState({
         list: temporaryList,

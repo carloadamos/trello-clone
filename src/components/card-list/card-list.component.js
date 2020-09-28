@@ -34,7 +34,7 @@ export default class CardList extends Component {
             {...provided.droppableProps}
           >
             <p>{listItem.title}</p>
-            {listItem.items.map((item, index) => (
+            {listItem.tasks.map((item, index) => (
               <CardItem
                 key={item.id}
                 item={item}

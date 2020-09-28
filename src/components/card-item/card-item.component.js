@@ -33,7 +33,7 @@ export default class CardItem extends Component {
               provided.draggableProps.style
             )}
           >
-            {item.content}
+            {item.description}
           </div>
         )}
       </Draggable>
