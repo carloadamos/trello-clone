@@ -22,20 +22,7 @@ export default class Board extends Component {
     super();
 
     this.state = {
-      list: [
-        // {
-        //   title: 'Things To Do',
-        //   items: [],
-        // },
-        // {
-        //   title: 'Doing',
-        //   items: []
-        // },
-        // {
-        //   title: 'Done',
-        //   items: []
-        // },
-      ],
+      list: [],
     };
   }
 
@@ -69,7 +56,7 @@ export default class Board extends Component {
 
     item = {
       id: item,
-      content: item,
+      description: item,
     };
 
     if (this.exists(temporaryList, item)) return
