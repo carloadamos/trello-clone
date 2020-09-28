@@ -20,7 +20,7 @@ router.route('/add').post((req, res) => {
     .catch(err => res.status(400).json(`Error: ${err}`));
 });
 
-router.route('/update/:id').post((req, res) => {
+router.route('/update/:id').put((req, res) => {
   List.findById(req.params.id)
     .then(taskList => {
       taskList.title = req.body.title;
