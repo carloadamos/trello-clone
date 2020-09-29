@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { DragDropContext } from "react-beautiful-dnd";
+import { Draggable, DragDropContext, Droppable } from "react-beautiful-dnd";
 import CardList from "../card-list/card-list.component";
 import axios from "axios";
 
@@ -21,19 +21,47 @@ export default class Board extends Component {
 
   render() {
     return (
-      <div className="board">
-        <DragDropContext onDragEnd={this.onDragEnd}>
-          {this.state.list.map((listItem, index) => (
-            <CardList
-              addItem={this.addItem}
-              key={index}
-              index={index}
-              listItem={listItem}
-            />
-          ))}
-        </DragDropContext>
-        {this._renderAddList()}
-      </div>
+      <DragDropContext onDragEnd={this.onDragEnd}>
+        (
+        <div className="board">
+          <Droppable
+            droppableId="droppable"
+            type="droppableItem"
+            direction="horizontal"
+          >
+            {(provided, snapshot) => (
+              <div className="board__card-list" ref={provided.innerRef}>
+                {this.state.list.map((listItem, index) => (
+                  <Draggable
+                    draggableId={String(index)}
+                    index={index}
+                    key={index}
+                  >
+                    {(provided, snapshot) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                      >
+                        <CardList
+                          addItem={this.addItem}
+                          key={index}
+                          index={index}
+                          listItem={listItem}
+                        />
+                        {provided.placeholder}
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+          {this._renderAddList()}
+        </div>
+        )
+      </DragDropContext>
     );
   }
 
@@ -169,32 +197,44 @@ export default class Board extends Component {
     // dropped outside the list
     if (!destination) return;
 
-    if (source.droppableId === destination.droppableId) {
-      const list = this.reorder(
-        this.state.list[source.droppableId].tasks,
+    if (result.type === "droppableItem") {
+      const items = this.reorder(
+        this.state.list,
         source.index,
         destination.index
       );
-      let temporaryList = this.state.list;
 
-      temporaryList[source.droppableId].tasks = list;
-      this.setState({ list: temporaryList });
-      this.updateList(temporaryList[source.droppableId]);
+      this.setState({
+        list: items,
+      });
     } else {
-      const list = this.move(
-        this.state.list[source.droppableId].tasks,
-        this.state.list[destination.droppableId].tasks,
-        source,
-        destination
-      );
-      let temporaryList = this.state.list;
+      if (source.droppableId === destination.droppableId) {
+        const list = this.reorder(
+          this.state.list[source.droppableId].tasks,
+          source.index,
+          destination.index
+        );
+        let temporaryList = this.state.list;
 
-      temporaryList[source.droppableId].tasks = list[source.droppableId];
-      temporaryList[destination.droppableId].tasks =
-        list[destination.droppableId];
-      this.setState({ list: temporaryList });
-      this.updateList(temporaryList[source.droppableId]);
-      this.updateList(temporaryList[destination.droppableId]);
+        temporaryList[source.droppableId].tasks = list;
+        this.setState({ list: temporaryList });
+        this.updateList(temporaryList[source.droppableId]);
+      } else {
+        const list = this.move(
+          this.state.list[source.droppableId].tasks,
+          this.state.list[destination.droppableId].tasks,
+          source,
+          destination
+        );
+        let temporaryList = this.state.list;
+
+        temporaryList[source.droppableId].tasks = list[source.droppableId];
+        temporaryList[destination.droppableId].tasks =
+          list[destination.droppableId];
+        this.setState({ list: temporaryList });
+        this.updateList(temporaryList[source.droppableId]);
+        this.updateList(temporaryList[destination.droppableId]);
+      }
     }
   };
 
