@@ -17,10 +17,9 @@ connection.once('open', () => {
   console.log("Trello Clone MongoDB database connection established successfully");
 });
 
-const taskRouter = require('./routes/task.route');
 const listRouter = require('./routes/list.route');
 const boardRouter = require('./routes/board.route');
-app.use('/task', taskRouter);
+
 app.use('/list', listRouter);
 app.use('/board', boardRouter);
 

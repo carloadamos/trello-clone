@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Draggable } from "react-beautiful-dnd";
+import { convertToStringId } from "../utilities/convert-to-string-id.utility";
 
 const grid = 8;
 const getItemStyle = (isDragging, draggableStyle) => ({
@@ -20,7 +21,7 @@ export default class CardItem extends Component {
     const { item, index } = this.props;
 
     return (
-      <Draggable draggableId={item.id} index={index}>
+      <Draggable draggableId={convertToStringId(item)} index={index}>
         {(provided, snapshot) => (
           <div
             ref={provided.innerRef}
@@ -31,10 +32,14 @@ export default class CardItem extends Component {
               provided.draggableProps.style
             )}
           >
-            {item.description}
+            {item}
           </div>
         )}
       </Draggable>
     );
   }
+
+  _convertToStringId = (text) => {
+    return text.replace(/\s/g, "");
+  };
 }

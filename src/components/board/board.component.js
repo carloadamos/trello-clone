@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Draggable, DragDropContext, Droppable } from "react-beautiful-dnd";
 import CardList from "../card-list/card-list.component";
+import { convertToStringId } from "../utilities/convert-to-string-id.utility";
 import axios from "axios";
 
 import "./board.style.css";
@@ -30,7 +31,7 @@ export default class Board extends Component {
           >
             {(provided, snapshot) => (
               <div className="board__card-list" ref={provided.innerRef}>
-                {this.state.list.map((listItem, index) => (
+                {this.state.list.map((taskList, index) => (
                   <Draggable
                     draggableId={String(index)}
                     index={index}
@@ -46,7 +47,7 @@ export default class Board extends Component {
                           addItem={this.addItem}
                           key={index}
                           index={index}
-                          listItem={listItem}
+                          taskList={taskList}
                         />
                         {provided.placeholder}
                       </div>
@@ -89,25 +90,23 @@ export default class Board extends Component {
 
   /**
    * Add item to the list.
-   * @param {Number} listIndex Selected list index.
-   * @param {Object} item New item.
+   * @param {Number} selectedListIndex Selected list index.
+   * @param {Object} task New item.
    */
-  addItem = (listIndex, item) => {
+  addItem = (selectedListIndex, task) => {
     let temporaryList = this.state.list;
 
-    if (!item) return;
+    if (!task) return;
 
-    item = {
-      id: item,
-      description: item,
-    };
+    if (this.exists(temporaryList, task)) return;
 
-    if (this.exists(temporaryList, item)) return;
-
-    temporaryList[listIndex].tasks = [...temporaryList[listIndex].tasks, item];
+    temporaryList[selectedListIndex].tasks = [
+      ...temporaryList[selectedListIndex].tasks,
+      task,
+    ];
 
     this.setState({ list: temporaryList });
-    this.updateList(temporaryList[listIndex]);
+    this.updateList(temporaryList[selectedListIndex]);
   };
 
   /**
@@ -130,15 +129,15 @@ export default class Board extends Component {
   /**
    * Checks if item exists in the whole list.
    * @param {Array} list Prop list
-   * @param {Object} newItem Item to add
+   * @param {Object} newTask Task to add
    */
-  exists = (list, newItem) => {
-    let item, itemObj;
+  exists = (list, newTask) => {
+    let task, itemObj;
 
     for (itemObj of list) {
-      for (item of itemObj.tasks) {
-        if (item.id === newItem.id) {
-          console.error("Item exists somewhere!");
+      for (task of itemObj.tasks) {
+        if (convertToStringId(task) === convertToStringId(newTask)) {
+          console.error("Task already exists!");
           return true;
         }
       }

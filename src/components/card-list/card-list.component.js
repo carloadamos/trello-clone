@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "./card-list.style.css";
 import { Droppable } from "react-beautiful-dnd";
 import CardItem from "../card-item/card-item.component";
+import { convertToStringId } from "../utilities/convert-to-string-id.utility";
 
 const grid = 8;
 const getListStyle = (isDraggingOver) => ({
@@ -21,7 +22,7 @@ export default class CardList extends Component {
   }
 
   render() {
-    const { index, listItem } = this.props;
+    const { index, taskList } = this.props;
 
     return (
       <Droppable droppableId={String(index)}>
@@ -32,9 +33,13 @@ export default class CardList extends Component {
             style={getListStyle(snapshot.isDraggingOver)}
             {...provided.droppableProps}
           >
-            <p>{listItem.title}</p>
-            {listItem.tasks.map((item, index) => (
-              <CardItem key={item.id} item={item} index={index} />
+            <p>{taskList.title}</p>
+            {taskList.tasks.map((item, index) => (
+              <CardItem
+                key={convertToStringId(item)}
+                item={item}
+                index={index}
+              />
             ))}
             {provided.placeholder}
 
@@ -56,6 +61,9 @@ export default class CardList extends Component {
     );
   }
 
+  /**
+   * Render textbox for adding new task.
+   */
   _renderInputField() {
     return <input type="text" onKeyDown={this._handleKeyDown} />;
   }
