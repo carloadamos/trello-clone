@@ -22,7 +22,6 @@ export default class Board extends Component {
   render() {
     return (
       <DragDropContext onDragEnd={this.onDragEnd}>
-        (
         <div className="board">
           <Droppable
             droppableId="droppable"
@@ -60,7 +59,6 @@ export default class Board extends Component {
           </Droppable>
           {this._renderAddList()}
         </div>
-        )
       </DragDropContext>
     );
   }
@@ -72,15 +70,19 @@ export default class Board extends Component {
     return (
       <div>
         {this.state.addList ? (
-          <input type="text" onKeyDown={this._handleKeyDown} />
+          <input
+            className="title-textbox"
+            type="text"
+            onKeyDown={this._handleKeyDown}
+          />
         ) : (
-            <button
-              className="board__add-list"
-              onClick={() => this.setState({ addList: true })}
-            >
-              Add list
-            </button>
-          )}
+          <button
+            className="board__add-list"
+            onClick={() => this.setState({ addList: true })}
+          >
+            Add list
+          </button>
+        )}
       </div>
     );
   }

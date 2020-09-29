@@ -9,7 +9,7 @@ const getItemStyle = (isDragging, draggableStyle) => ({
   margin: `0 0 ${grid}px 0`,
 
   // change background colour if dragging
-  background: isDragging ? "lightgreen" : "grey",
+  background: isDragging ? "#C53030" : "#FFF5F5",
 
   // styles we need to apply on draggables
   ...draggableStyle,

@@ -5,7 +5,7 @@ import CardItem from "../card-item/card-item.component";
 
 const grid = 8;
 const getListStyle = (isDraggingOver) => ({
-  background: isDraggingOver ? "lightblue" : "lightgrey",
+  background: isDraggingOver ? "lightblue" : "#FEB2B2",
   height: "min-content",
   padding: grid,
   width: 250,
