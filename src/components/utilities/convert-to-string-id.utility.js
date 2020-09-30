@@ -1,3 +1,3 @@
 export const convertToStringId = (text) => {
-  return text.replace(/\s/g, '');
+  return text.replace(/\s/g, '').toUpperCase();
 }
