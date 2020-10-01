@@ -1,9 +1,16 @@
+// Package
 import React, { Component } from "react";
-import "./card-list.style.css";
 import { Droppable } from "react-beautiful-dnd";
+
+// Component
 import CardItem from "../card-item/card-item.component";
+
+// Utilities
 import { convertToStringId } from "../utilities/convert-to-string-id.utility";
 
+// Styles
+import "./card-list.style.css";
+// Utilities
 const grid = 8;
 const getListStyle = (isDraggingOver) => ({
   background: isDraggingOver ? "lightblue" : "#FEB2B2",

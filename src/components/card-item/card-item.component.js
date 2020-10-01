@@ -1,5 +1,8 @@
+// Package
 import React, { Component } from "react";
 import { Draggable } from "react-beautiful-dnd";
+
+// Utilities
 import { convertToStringId } from "../utilities/convert-to-string-id.utility";
 
 const grid = 8;
@@ -38,8 +41,4 @@ export default class CardItem extends Component {
       </Draggable>
     );
   }
-
-  _convertToStringId = (text) => {
-    return text.replace(/\s/g, "");
-  };
 }

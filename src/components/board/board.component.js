@@ -1,9 +1,15 @@
+// Package
 import React, { Component } from "react";
 import { Draggable, DragDropContext, Droppable } from "react-beautiful-dnd";
-import CardList from "../card-list/card-list.component";
-import { convertToStringId } from "../utilities/convert-to-string-id.utility";
 import axios from "axios";
 
+// Utilities
+import { convertToStringId } from "../utilities/convert-to-string-id.utility";
+
+// Component
+import CardList from "../card-list/card-list.component";
+
+// Styles
 import "./board.style.css";
 
 export default class Board extends Component {
@@ -22,7 +28,7 @@ export default class Board extends Component {
 
   render() {
     return (
-      <DragDropContext onDragEnd={this.onDragEnd}>
+      <DragDropContext onDragEnd={this._onDragEnd}>
         <div className="board">
           <Droppable
             droppableId="droppable"
@@ -78,13 +84,13 @@ export default class Board extends Component {
             onKeyDown={this._handleKeyDown}
           />
         ) : (
-            <button
-              className="board__add-list"
-              onClick={() => this.setState({ addList: true })}
-            >
-              Add list
-            </button>
-          )}
+          <button
+            className="board__add-list"
+            onClick={() => this.setState({ addList: true })}
+          >
+            Add list
+          </button>
+        )}
       </div>
     );
   }
@@ -99,7 +105,7 @@ export default class Board extends Component {
 
     if (!task) return;
 
-    if (this.exists(temporaryList, task)) return;
+    if (this._exists(temporaryList, task)) return;
 
     /**
      * An array in JavaScript is also an object and variables only hold a reference to an object, not the object itself.
@@ -111,18 +117,18 @@ export default class Board extends Component {
       task,
     ];
 
-    this.updateBoard(this.state.board[0]);
+    this._updateBoard(this.state.board[0]);
   };
 
   /**
    * Add new list.
    * @param {String} title Title of new list.
    */
-  addList = (title) => {
+  _addList = (title) => {
     if (!title) return;
 
     /**
-     * Expectation is that every board has a default 
+     * Expectation is that every board has a default
      * title and list so we don't run into some weird
      * shit when accessing `.list`
      */
@@ -135,7 +141,7 @@ export default class Board extends Component {
       },
     ];
 
-    this.updateBoard(this.state.board[0])
+    this._updateBoard(this.state.board[0]);
   };
 
   /**
@@ -143,7 +149,7 @@ export default class Board extends Component {
    * @param {Array} list Prop list
    * @param {Object} newTask Task to add
    */
-  exists = (list, newTask) => {
+  _exists = (list, newTask) => {
     let task, itemObj;
 
     for (itemObj of list) {
@@ -162,7 +168,7 @@ export default class Board extends Component {
    */
   _handleKeyDown = (event) => {
     if (event.key === "Enter") {
-      this.addList(event.target.value);
+      this._addList(event.target.value);
       this.setState({ addList: false });
     }
 
@@ -177,8 +183,8 @@ export default class Board extends Component {
   _fetchBoard() {
     axios
       .get(`http://localhost:5000/board`)
-      .then((response) => {
-        this.setState({ board: response.data });
+      .then(({ data }) => {
+        this.setState({ board: data });
       })
       .catch((err) => console.error(`Error fetching data: ${err}`));
   }
@@ -186,7 +192,7 @@ export default class Board extends Component {
   /**
    * Moves an item from one list to another list.
    */
-  move = (source, destination, droppableSource, droppableDestination) => {
+  _move = (source, destination, droppableSource, droppableDestination) => {
     const sourceClone = Array.from(source);
     const destClone = Array.from(destination);
     const [removed] = sourceClone.splice(droppableSource.index, 1);
@@ -204,7 +210,7 @@ export default class Board extends Component {
    * Set of procedure to perform when draggin ends.
    * @param {Object} result Result of dragging
    */
-  onDragEnd = (result) => {
+  _onDragEnd = (result) => {
     const { source, destination } = result;
 
     // dropped outside the list
@@ -212,7 +218,7 @@ export default class Board extends Component {
 
     if (result.type === "droppableItem") {
       let tempBoard = this.state.board[0];
-      const items = this.reorder(
+      const items = this._reorder(
         this.state.board[0].list,
         source.index,
         destination.index
@@ -221,7 +227,7 @@ export default class Board extends Component {
       tempBoard.list = items;
     } else {
       if (source.droppableId === destination.droppableId) {
-        const list = this.reorder(
+        const list = this._reorder(
           this.state.board[0].list[source.droppableId].tasks,
           source.index,
           destination.index
@@ -230,7 +236,7 @@ export default class Board extends Component {
 
         temporaryList[source.droppableId].tasks = list;
       } else {
-        const list = this.move(
+        const list = this._move(
           this.state.board[0].list[source.droppableId].tasks,
           this.state.board[0].list[destination.droppableId].tasks,
           source,
@@ -243,7 +249,7 @@ export default class Board extends Component {
           list[destination.droppableId];
       }
     }
-    this.updateBoard(this.state.board[0]);
+    this._updateBoard(this.state.board[0]);
   };
 
   /**
@@ -252,7 +258,7 @@ export default class Board extends Component {
    * @param {number} startIndex Index
    * @param {number} endIndex Index
    */
-  reorder = (list, startIndex, endIndex) => {
+  _reorder = (list, startIndex, endIndex) => {
     const result = Array.from(list);
     const [removed] = result.splice(startIndex, 1);
     result.splice(endIndex, 0, removed);
@@ -264,7 +270,7 @@ export default class Board extends Component {
    * Update affected list.
    * @param {Array} board Task list array.
    */
-  updateBoard = (board) => {
+  _updateBoard = (board) => {
     axios
       .put(`http://localhost:5000/board/update/${board._id}`, board)
       .catch((err) => console.error(`Error fetching data: ${err}`));
