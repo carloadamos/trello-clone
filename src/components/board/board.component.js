@@ -78,13 +78,13 @@ export default class Board extends Component {
             onKeyDown={this._handleKeyDown}
           />
         ) : (
-          <button
-            className="board__add-list"
-            onClick={() => this.setState({ addList: true })}
-          >
-            Add list
-          </button>
-        )}
+            <button
+              className="board__add-list"
+              onClick={() => this.setState({ addList: true })}
+            >
+              Add list
+            </button>
+          )}
       </div>
     );
   }
@@ -121,14 +121,21 @@ export default class Board extends Component {
   addList = (title) => {
     if (!title) return;
 
-    axios
-      .post("http://localhost:5000/list/add", { title })
-      .then((response) => {
-        if (response.status === 200) {
-          this._fetchBoard();
-        }
-      })
-      .catch((err) => console.error(err));
+    /**
+     * Expectation is that every board has a default 
+     * title and list so we don't run into some weird
+     * shit when accessing `.list`
+     */
+    let selectedBoard = this.state.board[0];
+    selectedBoard.list = [
+      ...selectedBoard.list,
+      {
+        title,
+        tasks: [],
+      },
+    ];
+
+    this.updateBoard(this.state.board[0])
   };
 
   /**
