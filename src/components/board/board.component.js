@@ -258,7 +258,6 @@ export default class Board extends Component {
    * @param {Array} board Task list array.
    */
   updateBoard = (board) => {
-    console.log(board);
     axios
       .put(`http://localhost:5000/board/update/${board._id}`, board)
       .catch((err) => console.error(`Error fetching data: ${err}`));
