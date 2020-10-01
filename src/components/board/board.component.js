@@ -12,12 +12,12 @@ export default class Board extends Component {
 
     this.state = {
       addList: false,
-      list: [],
+      board: [],
     };
   }
 
   componentDidMount() {
-    this._fetchTaskList();
+    this._fetchBoard();
   }
 
   render() {
@@ -31,29 +31,30 @@ export default class Board extends Component {
           >
             {(provided, snapshot) => (
               <div className="board__card-list" ref={provided.innerRef}>
-                {this.state.list.map((taskList, index) => (
-                  <Draggable
-                    draggableId={String(index)}
-                    index={index}
-                    key={index}
-                  >
-                    {(provided, snapshot) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                      >
-                        <CardList
-                          addItem={this.addItem}
-                          key={index}
-                          index={index}
-                          taskList={taskList}
-                        />
-                        {provided.placeholder}
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
+                {Object.keys(this.state.board).length !== 0 &&
+                  this.state.board[0].list.map((taskList, index) => (
+                    <Draggable
+                      draggableId={String(index)}
+                      index={index}
+                      key={index}
+                    >
+                      {(provided, snapshot) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                        >
+                          <CardList
+                            addItem={this.addItem}
+                            key={index}
+                            index={index}
+                            taskList={taskList}
+                          />
+                          {provided.placeholder}
+                        </div>
+                      )}
+                    </Draggable>
+                  ))}
                 {provided.placeholder}
               </div>
             )}
@@ -94,19 +95,23 @@ export default class Board extends Component {
    * @param {Object} task New item.
    */
   addItem = (selectedListIndex, task) => {
-    let temporaryList = this.state.list;
+    let temporaryList = this.state.board[0].list;
 
     if (!task) return;
 
     if (this.exists(temporaryList, task)) return;
 
+    /**
+     * An array in JavaScript is also an object and variables only hold a reference to an object, not the object itself.
+     * Thus both variables have a reference to the same object.
+     * https://stackoverflow.com/questions/6612385/why-does-changing-an-array-in-javascript-affect-copies-of-the-array
+     */
     temporaryList[selectedListIndex].tasks = [
       ...temporaryList[selectedListIndex].tasks,
       task,
     ];
 
-    this.setState({ list: temporaryList });
-    this.updateList(temporaryList[selectedListIndex]);
+    this.updateBoard(this.state.board[0]);
   };
 
   /**
@@ -120,7 +125,7 @@ export default class Board extends Component {
       .post("http://localhost:5000/list/add", { title })
       .then((response) => {
         if (response.status === 200) {
-          this._fetchTaskList();
+          this._fetchBoard();
         }
       })
       .catch((err) => console.error(err));
@@ -160,13 +165,13 @@ export default class Board extends Component {
   };
 
   /**
-   * Fetch task list.
+   * Fetch board.
    */
-  _fetchTaskList() {
+  _fetchBoard() {
     axios
-      .get(`http://localhost:5000/list`)
+      .get(`http://localhost:5000/board`)
       .then((response) => {
-        this.setState({ list: response.data });
+        this.setState({ board: response.data });
       })
       .catch((err) => console.error(`Error fetching data: ${err}`));
   }
@@ -199,44 +204,39 @@ export default class Board extends Component {
     if (!destination) return;
 
     if (result.type === "droppableItem") {
+      let tempBoard = this.state.board[0];
       const items = this.reorder(
-        this.state.list,
+        this.state.board[0].list,
         source.index,
         destination.index
       );
 
-      this.setState({
-        list: items,
-      });
+      tempBoard.list = items;
     } else {
       if (source.droppableId === destination.droppableId) {
         const list = this.reorder(
-          this.state.list[source.droppableId].tasks,
+          this.state.board[0].list[source.droppableId].tasks,
           source.index,
           destination.index
         );
-        let temporaryList = this.state.list;
+        let temporaryList = this.state.board[0].list;
 
         temporaryList[source.droppableId].tasks = list;
-        this.setState({ list: temporaryList });
-        this.updateList(temporaryList[source.droppableId]);
       } else {
         const list = this.move(
-          this.state.list[source.droppableId].tasks,
-          this.state.list[destination.droppableId].tasks,
+          this.state.board[0].list[source.droppableId].tasks,
+          this.state.board[0].list[destination.droppableId].tasks,
           source,
           destination
         );
-        let temporaryList = this.state.list;
+        let temporaryList = this.state.board[0].list;
 
         temporaryList[source.droppableId].tasks = list[source.droppableId];
         temporaryList[destination.droppableId].tasks =
           list[destination.droppableId];
-        this.setState({ list: temporaryList });
-        this.updateList(temporaryList[source.droppableId]);
-        this.updateList(temporaryList[destination.droppableId]);
       }
     }
+    this.updateBoard(this.state.board[0]);
   };
 
   /**
@@ -255,11 +255,12 @@ export default class Board extends Component {
 
   /**
    * Update affected list.
-   * @param {Array} list Task list array.
+   * @param {Array} board Task list array.
    */
-  updateList = (list) => {
+  updateBoard = (board) => {
+    console.log(board);
     axios
-      .put(`http://localhost:5000/list/update/${list._id}`, list)
+      .put(`http://localhost:5000/board/update/${board._id}`, board)
       .catch((err) => console.error(`Error fetching data: ${err}`));
   };
 }
