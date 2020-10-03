@@ -1,5 +1,5 @@
 // Package
-import React, { Component } from "react";
+import React, { useEffect, useState } from "react";
 import { Draggable, DragDropContext, Droppable } from "react-beautiful-dnd";
 import axios from "axios";
 
@@ -20,87 +20,34 @@ const updateTask = () => {
 };
 let editingTask = false;
 
-export default class Board extends Component {
-  constructor() {
-    super();
+const Board = () => {
+  const [addList, setAddList] = useState(false);
+  const [board, setBoard] = useState([]);
 
-    this.state = {
-      addList: false,
-      board: [],
-    };
-  }
-
-  componentDidMount() {
-    this._fetchBoard();
-  }
-
-  render() {
-    return (
-      <BoardContext.Provider value={{ editingTask, updateTask }}>
-        <DragDropContext onDragEnd={this._onDragEnd}>
-          <div className="board">
-            <Droppable
-              droppableId="droppable"
-              type="droppableItem"
-              direction="horizontal"
-            >
-              {(provided, snapshot) => (
-                <div className="board__card-list" ref={provided.innerRef}>
-                  {Object.keys(this.state.board).length !== 0 &&
-                    this.state.board[0].list.map((taskList, index) => (
-                      <Draggable
-                        draggableId={String(index)}
-                        index={index}
-                        key={index}
-                      >
-                        {(provided, snapshot) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                          >
-                            <CardList
-                              addItem={this.addItem}
-                              key={index}
-                              index={index}
-                              taskList={taskList}
-                            />
-                            {provided.placeholder}
-                          </div>
-                        )}
-                      </Draggable>
-                    ))}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
-            {this._renderAddList()}
-          </div>
-        </DragDropContext>
-      </BoardContext.Provider>
-    );
-  }
+  useEffect(() => {
+    _fetchBoard();
+  }, []);
 
   /**
    * Render add button and text field.
    */
-  _renderAddList() {
+  const _renderAddList = () => {
     return (
       <div>
-        {this.state.addList ? (
+        {addList ? (
           <input
             className="title-textbox"
             type="text"
-            onKeyDown={this._handleKeyDown}
+            onKeyDown={_handleKeyDown}
           />
         ) : (
-          <button
-            className="board__add-list"
-            onClick={() => this.setState({ addList: true })}
-          >
-            Add list
-          </button>
-        )}
+            <button
+              className="board__add-list"
+              onClick={() => setAddList(true)}
+            >
+              Add list
+            </button>
+          )}
       </div>
     );
   }
@@ -110,12 +57,12 @@ export default class Board extends Component {
    * @param {Number} selectedListIndex Selected list index.
    * @param {Object} task New item.
    */
-  addItem = (selectedListIndex, task) => {
-    let temporaryList = this.state.board[0].list;
+  const addItem = (selectedListIndex, task) => {
+    let temporaryList = board[0].list;
 
     if (!task) return;
 
-    if (this._exists(temporaryList, task)) return;
+    if (_exists(temporaryList, task)) return;
 
     /**
      * An array in JavaScript is also an object and variables only hold a reference to an object, not the object itself.
@@ -127,14 +74,14 @@ export default class Board extends Component {
       task,
     ];
 
-    this._updateBoard(this.state.board[0]);
+    _updateBoard(board[0]);
   };
 
   /**
    * Add new list.
    * @param {String} title Title of new list.
    */
-  _addList = (title) => {
+  const _addList = (title) => {
     if (!title) return;
 
     /**
@@ -142,7 +89,7 @@ export default class Board extends Component {
      * title and list so we don't run into some weird
      * shit when accessing `.list`
      */
-    let selectedBoard = this.state.board[0];
+    let selectedBoard = board[0];
     selectedBoard.list = [
       ...selectedBoard.list,
       {
@@ -151,7 +98,7 @@ export default class Board extends Component {
       },
     ];
 
-    this._updateBoard(this.state.board[0]);
+    _updateBoard(board[0]);
   };
 
   /**
@@ -159,7 +106,7 @@ export default class Board extends Component {
    * @param {Array} list Prop list
    * @param {Object} newTask Task to add
    */
-  _exists = (list, newTask) => {
+  const _exists = (list, newTask) => {
     let task, itemObj;
 
     for (itemObj of list) {
@@ -176,25 +123,25 @@ export default class Board extends Component {
    * Kydown handler.
    * @param {Object} event Event object.
    */
-  _handleKeyDown = (event) => {
+  const _handleKeyDown = (event) => {
     if (event.key === "Enter") {
-      this._addList(event.target.value);
-      this.setState({ addList: false });
+      _addList(event.target.value);
+      setAddList(false);
     }
 
     if (event.key === "Escape") {
-      this.setState({ addList: false });
+      setAddList(false);
     }
-  };
+  }
 
   /**
    * Fetch board.
    */
-  _fetchBoard() {
+  const _fetchBoard = () => {
     axios
       .get(`http://localhost:5000/board`)
       .then(({ data }) => {
-        this.setState({ board: data });
+        setBoard(data);
       })
       .catch((err) => console.error(`Error fetching data: ${err}`));
   }
@@ -202,7 +149,7 @@ export default class Board extends Component {
   /**
    * Moves an item from one list to another list.
    */
-  _move = (source, destination, droppableSource, droppableDestination) => {
+  const _move = (source, destination, droppableSource, droppableDestination) => {
     const sourceClone = Array.from(source);
     const destClone = Array.from(destination);
     const [removed] = sourceClone.splice(droppableSource.index, 1);
@@ -220,16 +167,16 @@ export default class Board extends Component {
    * Set of procedure to perform when draggin ends.
    * @param {Object} result Result of dragging
    */
-  _onDragEnd = (result) => {
+  const _onDragEnd = (result) => {
     const { source, destination } = result;
 
     // dropped outside the list
     if (!destination) return;
 
     if (result.type === "droppableItem") {
-      let tempBoard = this.state.board[0];
-      const items = this._reorder(
-        this.state.board[0].list,
+      let tempBoard = board[0];
+      const items = _reorder(
+        board[0].list,
         source.index,
         destination.index
       );
@@ -237,29 +184,29 @@ export default class Board extends Component {
       tempBoard.list = items;
     } else {
       if (source.droppableId === destination.droppableId) {
-        const list = this._reorder(
-          this.state.board[0].list[source.droppableId].tasks,
+        const list = _reorder(
+          board[0].list[source.droppableId].tasks,
           source.index,
           destination.index
         );
-        let temporaryList = this.state.board[0].list;
+        let temporaryList = board[0].list;
 
         temporaryList[source.droppableId].tasks = list;
       } else {
-        const list = this._move(
-          this.state.board[0].list[source.droppableId].tasks,
-          this.state.board[0].list[destination.droppableId].tasks,
+        const list = _move(
+          board[0].list[source.droppableId].tasks,
+          board[0].list[destination.droppableId].tasks,
           source,
           destination
         );
-        let temporaryList = this.state.board[0].list;
+        let temporaryList = board[0].list;
 
         temporaryList[source.droppableId].tasks = list[source.droppableId];
         temporaryList[destination.droppableId].tasks =
           list[destination.droppableId];
       }
     }
-    this._updateBoard(this.state.board[0]);
+    _updateBoard(board[0]);
   };
 
   /**
@@ -268,7 +215,7 @@ export default class Board extends Component {
    * @param {number} startIndex Index
    * @param {number} endIndex Index
    */
-  _reorder = (list, startIndex, endIndex) => {
+  const _reorder = (list, startIndex, endIndex) => {
     const result = Array.from(list);
     const [removed] = result.splice(startIndex, 1);
     result.splice(endIndex, 0, removed);
@@ -280,9 +227,56 @@ export default class Board extends Component {
    * Update affected list.
    * @param {Array} board Task list array.
    */
-  _updateBoard = (board) => {
+  const _updateBoard = (board) => {
     axios
       .put(`http://localhost:5000/board/update/${board._id}`, board)
       .catch((err) => console.error(`Error fetching data: ${err}`));
   };
+
+  return (
+    <BoardContext.Provider value={{ editingTask, updateTask }}>
+      <DragDropContext onDragEnd={_onDragEnd}>
+        <div className="board">
+          <Droppable
+            droppableId="droppable"
+            type="droppableItem"
+            direction="horizontal"
+          >
+            {(provided, snapshot) => (
+              <div className="board__card-list" ref={provided.innerRef}>
+                {Object.keys(board).length !== 0 &&
+                  board[0].list.map((taskList, index) => (
+                    <Draggable
+                      draggableId={String(index)}
+                      index={index}
+                      key={index}
+                    >
+                      {(provided, snapshot) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                        >
+                          <CardList
+                            addItem={addItem}
+                            key={index}
+                            index={index}
+                            taskList={taskList}
+                          />
+                          {provided.placeholder}
+                        </div>
+                      )}
+                    </Draggable>
+                  ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+          {_renderAddList()}
+        </div>
+      </DragDropContext>
+    </BoardContext.Provider>
+  );
 }
+
+export default Board;
