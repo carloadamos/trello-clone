@@ -1,0 +1,15 @@
+.task {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.task span, .task input[type="text"] {
+  padding: 1rem 0 1rem 1rem;
+}
+
+.icon {
+  margin: 1rem;
+  cursor: pointer;
+}

@@ -24,5 +24,5 @@ app.use('/list', listRouter);
 app.use('/board', boardRouter);
 
 app.listen(port, () => {
-  console.log(`Trello Clone Server is running on port: ${port}`)
+  console.log(`Trello Clone Local Server is running on port: ${port}`)
 });

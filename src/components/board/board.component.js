@@ -9,8 +9,16 @@ import { convertToStringId } from "../utilities/convert-to-string-id.utility";
 // Component
 import CardList from "../card-list/card-list.component";
 
+// Context
+import BoardContext from "../BoardContext";
+
 // Styles
 import "./board.style.css";
+
+const updateTask = () => {
+  console.log("I am the update task from another galaxy");
+};
+let editingTask = false;
 
 export default class Board extends Component {
   constructor() {
@@ -28,46 +36,48 @@ export default class Board extends Component {
 
   render() {
     return (
-      <DragDropContext onDragEnd={this._onDragEnd}>
-        <div className="board">
-          <Droppable
-            droppableId="droppable"
-            type="droppableItem"
-            direction="horizontal"
-          >
-            {(provided, snapshot) => (
-              <div className="board__card-list" ref={provided.innerRef}>
-                {Object.keys(this.state.board).length !== 0 &&
-                  this.state.board[0].list.map((taskList, index) => (
-                    <Draggable
-                      draggableId={String(index)}
-                      index={index}
-                      key={index}
-                    >
-                      {(provided, snapshot) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                        >
-                          <CardList
-                            addItem={this.addItem}
-                            key={index}
-                            index={index}
-                            taskList={taskList}
-                          />
-                          {provided.placeholder}
-                        </div>
-                      )}
-                    </Draggable>
-                  ))}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-          {this._renderAddList()}
-        </div>
-      </DragDropContext>
+      <BoardContext.Provider value={{ editingTask, updateTask }}>
+        <DragDropContext onDragEnd={this._onDragEnd}>
+          <div className="board">
+            <Droppable
+              droppableId="droppable"
+              type="droppableItem"
+              direction="horizontal"
+            >
+              {(provided, snapshot) => (
+                <div className="board__card-list" ref={provided.innerRef}>
+                  {Object.keys(this.state.board).length !== 0 &&
+                    this.state.board[0].list.map((taskList, index) => (
+                      <Draggable
+                        draggableId={String(index)}
+                        index={index}
+                        key={index}
+                      >
+                        {(provided, snapshot) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                          >
+                            <CardList
+                              addItem={this.addItem}
+                              key={index}
+                              index={index}
+                              taskList={taskList}
+                            />
+                            {provided.placeholder}
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+            {this._renderAddList()}
+          </div>
+        </DragDropContext>
+      </BoardContext.Provider>
     );
   }
 
