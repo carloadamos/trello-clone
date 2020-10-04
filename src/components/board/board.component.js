@@ -15,9 +15,6 @@ import BoardContext from "../BoardContext";
 // Styles
 import "./board.style.css";
 
-const updateTask = () => {
-  console.log("I am the update task from another galaxy");
-};
 let editingTask = false;
 
 const Board = () => {
@@ -27,6 +24,10 @@ const Board = () => {
   useEffect(() => {
     _fetchBoard();
   }, []);
+
+  const updateTask = (index, list) => {
+    console.log(`I am the update task from another galaxy and you edited ${index} from ${list }`);
+  };
 
   /**
    * Render add button and text field.

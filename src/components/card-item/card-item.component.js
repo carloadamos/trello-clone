@@ -28,16 +28,15 @@ const getItemStyle = (isDragging, draggableStyle) => ({
 
 const CardItem = props => {
   const [isEditingTask, setEditingTask] = useState(false);
-  const { item, index } = props;
+  const { item, index, list } = props;
 
-  const _handleKeyDown = (event) => {
+  const _handleKeyDown = ({ updateTask }, index, list, event) => {
     if (event.key === "Escape") {
       setEditingTask(false);
     }
 
     if (event.key === "Enter") {
-      // Implement way to edit task
-      console.warn('Implement way to edit task')
+      updateTask(index, list);
     }
   };
 
@@ -60,7 +59,7 @@ const CardItem = props => {
                   <input
                     type="text"
                     defaultValue={item}
-                    onKeyDown={_handleKeyDown}
+                    onKeyDown={_handleKeyDown.bind(this, value, index, list)}
                   />
                 ) : (
                     <span>{item}</span>

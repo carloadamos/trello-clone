@@ -22,6 +22,7 @@ const getListStyle = (isDraggingOver) => ({
 const CardList = props => {
   const [addingItem, setAddingItem] = useState(false);
   const { index, taskList, addItem } = props;
+  const { title } = taskList;
 
   /**
    * Render textbox for adding new task.
@@ -54,12 +55,13 @@ const CardList = props => {
           style={getListStyle(snapshot.isDraggingOver)}
           {...provided.droppableProps}
         >
-          <p>{taskList.title}</p>
+          <p>{title}</p>
           {taskList.tasks.map((item, index) => (
             <CardItem
               key={convertToStringId(item)}
               item={item}
               index={index}
+              list={title}
             />
           ))}
           {provided.placeholder}
