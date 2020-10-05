@@ -20,13 +20,20 @@ let editingTask = false;
 const Board = () => {
   const [addList, setAddList] = useState(false);
   const [board, setBoard] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     _fetchBoard();
-  }, []);
+  }, [loading]);
 
-  const updateTask = (index, list) => {
-    console.log(`I am the update task from another galaxy and you edited ${index} from ${list }`);
+  const updateTask = (index, list, value) => {
+    for (let boardList of board[0].list) {
+      if (convertToStringId(boardList.title) === convertToStringId(list)) {
+        boardList.tasks.splice(index, 1, value);
+        _updateBoard(board[0]);
+        return;
+      }
+    }
   };
 
   /**
@@ -139,6 +146,7 @@ const Board = () => {
    * Fetch board.
    */
   const _fetchBoard = () => {
+    console.log('fetch')
     axios
       .get(`http://localhost:5000/board`)
       .then(({ data }) => {
@@ -207,6 +215,7 @@ const Board = () => {
           list[destination.droppableId];
       }
     }
+
     _updateBoard(board[0]);
   };
 
@@ -229,8 +238,10 @@ const Board = () => {
    * @param {Array} board Task list array.
    */
   const _updateBoard = (board) => {
+    setLoading(true);
     axios
       .put(`http://localhost:5000/board/update/${board._id}`, board)
+      .then(() => setLoading(false))
       .catch((err) => console.error(`Error fetching data: ${err}`));
   };
 

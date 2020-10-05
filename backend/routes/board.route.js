@@ -8,8 +8,8 @@ router.route("/").get((req, res) => {
 });
 
 router.route("/add").post((req, res) => {
-  const title = req.body.title;
-  const list = req.body.list;
+  const title = req.body[0].title;
+  const list = req.body[0].list;
   const board = new Board({
     title,
     list: list || [],

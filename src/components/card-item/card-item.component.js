@@ -36,7 +36,8 @@ const CardItem = props => {
     }
 
     if (event.key === "Enter") {
-      updateTask(index, list);
+      updateTask(index, list, event.target.value);
+      setEditingTask(false);
     }
   };
 
