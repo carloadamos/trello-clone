@@ -8,7 +8,7 @@ import { convertToStringId } from "../utilities/convert-to-string-id.utility";
 // Styles
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import "./card-item.style.css";
+import { StyledInputText, StyledSpan, StyledTask } from "./StyledCardItem";
 
 import BoardContext from "../BoardContext";
 
@@ -25,8 +25,7 @@ const getItemStyle = (isDragging, draggableStyle) => ({
   ...draggableStyle,
 });
 
-
-const CardItem = props => {
+const CardItem = (props) => {
   const [isEditingTask, setEditingTask] = useState(false);
   const { item, index, list } = props;
 
@@ -55,28 +54,27 @@ const CardItem = props => {
                 provided.draggableProps.style
               )}
             >
-              <div className="task">
+              <StyledTask>
                 {isEditingTask ? (
-                  <input
-                    type="text"
+                  <StyledInputText
                     defaultValue={item}
                     onKeyDown={_handleKeyDown.bind(this, value, index, list)}
-                  />
+                  ></StyledInputText>
                 ) : (
-                    <span>{item}</span>
-                  )}
+                  <StyledSpan>{item}</StyledSpan>
+                )}
                 <FontAwesomeIcon
                   icon={faEdit}
                   className="icon"
                   onClick={() => setEditingTask(true)}
                 />
-              </div>
+              </StyledTask>
             </div>
           )}
         </Draggable>
       )}
     </BoardContext.Consumer>
   );
-}
+};
 
 export default CardItem;
