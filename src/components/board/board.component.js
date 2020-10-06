@@ -15,8 +15,6 @@ import BoardContext from "../BoardContext";
 // Styles
 import { StyledBoard, StyledBoardList, StyledTitleInput, StyledAddButton } from './StyledBoard';
 
-let editingTask = false;
-
 const Board = () => {
   const [addList, setAddList] = useState(false);
   const [board, setBoard] = useState([]);
