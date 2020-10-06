@@ -351,10 +351,6 @@ body {
   box-sizing: border-box;
 }
 
-.board {
-  display: flex;
-}
-
 .icon {
   margin: 1rem;
   cursor: pointer;

@@ -5,7 +5,7 @@ const StyledInputText = styled.input.attrs({
   placeholder: "A text",
 })`
   padding: 1rem 0 1rem 1rem;
-  color: #C53030;
+  color: #c53030;
 `;
 
 const StyledSpan = styled.span`

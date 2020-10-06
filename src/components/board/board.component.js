@@ -13,7 +13,7 @@ import CardList from "../card-list/card-list.component";
 import BoardContext from "../BoardContext";
 
 // Styles
-import "./board.style.css";
+import { StyledBoard, StyledBoardList, StyledTitleInput, StyledAddButton } from './StyledBoard';
 
 let editingTask = false;
 
@@ -43,18 +43,16 @@ const Board = () => {
     return (
       <div>
         {addList ? (
-          <input
-            className="title-textbox"
+          <StyledTitleInput
             type="text"
             onKeyDown={_handleKeyDown}
           />
         ) : (
-            <button
-              className="board__add-list"
+            <StyledAddButton
               onClick={() => setAddList(true)}
             >
               Add list
-            </button>
+            </StyledAddButton>
           )}
       </div>
     );
@@ -248,14 +246,14 @@ const Board = () => {
   return (
     <BoardContext.Provider value={{ editingTask, updateTask }}>
       <DragDropContext onDragEnd={_onDragEnd}>
-        <div className="board">
+        <StyledBoard>
           <Droppable
             droppableId="droppable"
             type="droppableItem"
             direction="horizontal"
           >
             {(provided, snapshot) => (
-              <div className="board__card-list" ref={provided.innerRef}>
+              <StyledBoardList ref={provided.innerRef}>
                 {Object.keys(board).length !== 0 &&
                   board[0].list.map((taskList, index) => (
                     <Draggable
@@ -281,11 +279,11 @@ const Board = () => {
                     </Draggable>
                   ))}
                 {provided.placeholder}
-              </div>
+              </StyledBoardList>
             )}
           </Droppable>
           {_renderAddList()}
-        </div>
+        </StyledBoard>
       </DragDropContext>
     </BoardContext.Provider>
   );
