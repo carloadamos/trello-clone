@@ -9,27 +9,27 @@ import CardItem from "../card-item/card-item.component";
 import { convertToStringId } from "../utilities/convert-to-string-id.utility";
 
 // Styles
-import "./card-list.style.css";
-// Utilities
-const grid = 8;
-const getListStyle = (isDraggingOver) => ({
-  background: isDraggingOver ? "lightblue" : "#FEB2B2",
-  height: "min-content",
-  padding: grid,
-  width: 250,
-});
+import { StyledAddItem, StyledCardList } from "./StyledCardList";
 
-const CardList = props => {
+const CardList = (props) => {
   const [addingItem, setAddingItem] = useState(false);
   const { index, taskList, addItem } = props;
   const { title } = taskList;
+  const grid = 8;
+
+  const getListStyle = (isDraggingOver) => ({
+    background: isDraggingOver ? "lightblue" : "#FEB2B2",
+    height: "min-content",
+    padding: grid,
+    width: 250,
+  });
 
   /**
    * Render textbox for adding new task.
    */
   const _renderInputField = () => {
     return <input type="text" onKeyDown={_handleKeyDown} />;
-  }
+  };
 
   /**
    * Kydown handler.
@@ -49,8 +49,7 @@ const CardList = props => {
   return (
     <Droppable droppableId={String(index)}>
       {(provided, snapshot) => (
-        <div
-          className="card-list"
+        <StyledCardList
           ref={provided.innerRef}
           style={getListStyle(snapshot.isDraggingOver)}
           {...provided.droppableProps}
@@ -66,22 +65,17 @@ const CardList = props => {
           ))}
           {provided.placeholder}
 
-          <div
-            className="card-list__add"
+          <StyledAddItem
             onClick={() => {
               setAddingItem(true);
             }}
           >
-            {!addingItem ? (
-              <p>Add item</p>
-            ) : (
-                _renderInputField()
-              )}
-          </div>
-        </div>
+            {!addingItem ? <p>Add item</p> : _renderInputField()}
+          </StyledAddItem>
+        </StyledCardList>
       )}
     </Droppable>
   );
-}
+};
 
 export default CardList;
