@@ -6,9 +6,9 @@ import { Draggable } from "react-beautiful-dnd";
 import { convertToStringId } from "../utilities/convert-to-string-id.utility";
 
 // Styles
-import { faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faMinus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { StyledInputText, StyledSpan, StyledTask } from "./StyledCardItem";
+import { StyledIcons, StyledInputText, StyledSpan, StyledTask } from "./StyledCardItem";
 
 import BoardContext from "../BoardContext";
 
@@ -61,13 +61,20 @@ const CardItem = (props) => {
                     onKeyDown={_handleKeyDown.bind(this, value, index, list)}
                   ></StyledInputText>
                 ) : (
-                  <StyledSpan>{item}</StyledSpan>
-                )}
-                <FontAwesomeIcon
-                  icon={faEdit}
-                  className="icon"
-                  onClick={() => setEditingTask(true)}
-                />
+                    <StyledSpan>{item}</StyledSpan>
+                  )}
+                <StyledIcons>
+                  <FontAwesomeIcon
+                    icon={faEdit}
+                    className="icon"
+                    onClick={() => setEditingTask(true)}
+                  />
+                  <FontAwesomeIcon
+                    icon={faMinus}
+                    className="icon"
+                    onClick={() => value.removeTask(index, list)}
+                  />
+                </StyledIcons>
               </StyledTask>
             </div>
           )}

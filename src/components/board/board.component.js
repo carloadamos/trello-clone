@@ -36,6 +36,16 @@ const Board = () => {
     }
   };
 
+  const removeTask = (index, list) => {
+    for (let boardList of board[0].list) {
+      if (convertToStringId(boardList.title) === convertToStringId(list)) {
+         boardList.tasks.splice(index, 1);
+        _updateBoard(board[0]);
+        return;
+      }
+    }
+  }
+
   /**
    * Render add button and text field.
    */
@@ -244,7 +254,7 @@ const Board = () => {
   };
 
   return (
-    <BoardContext.Provider value={{ editingTask, updateTask }}>
+    <BoardContext.Provider value={{ updateTask, removeTask }}>
       <DragDropContext onDragEnd={_onDragEnd}>
         <StyledBoard>
           <Droppable

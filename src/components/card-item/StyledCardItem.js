@@ -19,4 +19,8 @@ const StyledTask = styled.div`
   align-items: center;
 `;
 
-export { StyledInputText, StyledSpan, StyledTask };
+const StyledIcons = styled.div`
+  display: flex;
+`;
+
+export { StyledInputText, StyledSpan, StyledTask, StyledIcons };
