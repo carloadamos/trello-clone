@@ -22,7 +22,7 @@ const Board = () => {
 
   useEffect(() => {
     _fetchBoard();
-  }, [loading]);
+  }, []);
 
   const updateTask = (index, list, value) => {
     for (let boardList of board[0].list) {
@@ -37,7 +37,7 @@ const Board = () => {
   const removeTask = (index, list) => {
     for (let boardList of board[0].list) {
       if (convertToStringId(boardList.title) === convertToStringId(list)) {
-         boardList.tasks.splice(index, 1);
+        boardList.tasks.splice(index, 1);
         _updateBoard(board[0]);
         return;
       }
