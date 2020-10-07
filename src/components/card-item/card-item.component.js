@@ -10,20 +10,8 @@ import { faEdit, faMinus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { StyledIcons, StyledInputText, StyledSpan, StyledTask } from "./StyledCardItem";
 
+// Context
 import BoardContext from "../BoardContext";
-
-const grid = 8;
-const getItemStyle = (isDragging, draggableStyle) => ({
-  // some basic styles to make the items look a bit nicer
-  userSelect: "none",
-  margin: `0 0 ${grid}px 0`,
-
-  // change background colour if dragging
-  background: isDragging ? "#C53030" : "#FFF5F5",
-
-  // styles we need to apply on draggables
-  ...draggableStyle,
-});
 
 const CardItem = (props) => {
   const [isEditingTask, setEditingTask] = useState(false);
@@ -39,6 +27,18 @@ const CardItem = (props) => {
       setEditingTask(false);
     }
   };
+
+  const getItemStyle = (isDragging, draggableStyle) => ({
+    // some basic styles to make the items look a bit nicer
+    userSelect: "none",
+    margin: `0 0 ${8}px 0`,
+
+    // change background colour if dragging
+    background: isDragging ? "#C53030" : "#FFF5F5",
+
+    // styles we need to apply on draggables
+    ...draggableStyle,
+  });
 
   return (
     <BoardContext.Consumer>
@@ -61,8 +61,8 @@ const CardItem = (props) => {
                     onKeyDown={_handleKeyDown.bind(this, value, index, list)}
                   ></StyledInputText>
                 ) : (
-                    <StyledSpan>{item}</StyledSpan>
-                  )}
+                  <StyledSpan>{item}</StyledSpan>
+                )}
                 <StyledIcons>
                   <FontAwesomeIcon
                     icon={faEdit}

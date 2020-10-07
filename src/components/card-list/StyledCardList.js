@@ -14,4 +14,9 @@ const StyledCardList = styled.div`
   padding: 0.5rem;
 `;
 
-export { StyledAddItem, StyledCardList };
+const StyledTitleBar = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+export { StyledAddItem, StyledCardList, StyledTitleBar };

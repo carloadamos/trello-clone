@@ -44,6 +44,12 @@ const Board = () => {
     }
   }
 
+  const removeList = (index) => {
+    console.log('index', index)
+    board[0].list.splice(index, 1);
+    _updateBoard(board[0]);
+  }
+
   /**
    * Render add button and text field.
    */
@@ -252,7 +258,7 @@ const Board = () => {
   };
 
   return (
-    <BoardContext.Provider value={{ updateTask, removeTask }}>
+    <BoardContext.Provider value={{ updateTask, removeTask, removeList }}>
       <DragDropContext onDragEnd={_onDragEnd}>
         <StyledBoard>
           <Droppable

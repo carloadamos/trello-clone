@@ -7,20 +7,24 @@ import CardItem from "../card-item/card-item.component";
 
 // Utilities
 import { convertToStringId } from "../utilities/convert-to-string-id.utility";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 // Styles
-import { StyledAddItem, StyledCardList } from "./StyledCardList";
+import { StyledAddItem, StyledCardList, StyledTitleBar } from "./StyledCardList";
+
+// Context
+import BoardContext from '../BoardContext';
 
 const CardList = (props) => {
   const [addingItem, setAddingItem] = useState(false);
   const { index, taskList, addItem } = props;
   const { title } = taskList;
-  const grid = 8;
 
   const getListStyle = (isDraggingOver) => ({
     background: isDraggingOver ? "lightblue" : "#FEB2B2",
     height: "min-content",
-    padding: grid,
+    padding: 8,
     width: 250,
   });
 
@@ -47,34 +51,45 @@ const CardList = (props) => {
   };
 
   return (
-    <Droppable droppableId={String(index)}>
-      {(provided, snapshot) => (
-        <StyledCardList
-          ref={provided.innerRef}
-          style={getListStyle(snapshot.isDraggingOver)}
-          {...provided.droppableProps}
-        >
-          <p>{title}</p>
-          {taskList.tasks.map((item, index) => (
-            <CardItem
-              key={convertToStringId(item)}
-              item={item}
-              index={index}
-              list={title}
-            />
-          ))}
-          {provided.placeholder}
+    <BoardContext.Consumer>
+      {(value) =>
+        <Droppable droppableId={String(index)}>
+          {(provided, snapshot) => (
+            <StyledCardList
+              ref={provided.innerRef}
+              style={getListStyle(snapshot.isDraggingOver)}
+              {...provided.droppableProps}
+            >
+              <StyledTitleBar>
+                <p>{title}</p>
+                <FontAwesomeIcon
+                  icon={faTrash}
+                  className="icon"
+                  onClick={() => value.removeList(index)}
+                ></FontAwesomeIcon>
+              </StyledTitleBar>
+              {taskList.tasks.map((item, index) => (
+                <CardItem
+                  key={convertToStringId(item)}
+                  item={item}
+                  index={index}
+                  list={title}
+                />
+              ))}
+              {provided.placeholder}
 
-          <StyledAddItem
-            onClick={() => {
-              setAddingItem(true);
-            }}
-          >
-            {!addingItem ? <p>Add item</p> : _renderInputField()}
-          </StyledAddItem>
-        </StyledCardList>
-      )}
-    </Droppable>
+              <StyledAddItem
+                onClick={() => {
+                  setAddingItem(true);
+                }}
+              >
+                {!addingItem ? <p>Add item</p> : _renderInputField()}
+              </StyledAddItem>
+            </StyledCardList>
+          )}
+        </Droppable>
+      }
+    </BoardContext.Consumer>
   );
 };
 
