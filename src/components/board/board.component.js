@@ -45,7 +45,6 @@ const Board = () => {
   }
 
   const removeList = (index) => {
-    console.log('index', index)
     board[0].list.splice(index, 1);
     _updateBoard(board[0]);
   }
@@ -158,7 +157,6 @@ const Board = () => {
    * Fetch board.
    */
   const _fetchBoard = () => {
-    console.log('fetch')
     axios
       .get(`http://localhost:5000/board`)
       .then(({ data }) => {
@@ -286,6 +284,7 @@ const Board = () => {
                             key={index}
                             index={index}
                             taskList={taskList}
+                            loading={loading}
                           />
                           {provided.placeholder}
                         </div>

@@ -17,6 +17,7 @@ const StyledCardList = styled.div`
 const StyledTitleBar = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
 `;
 
 export { StyledAddItem, StyledCardList, StyledTitleBar };

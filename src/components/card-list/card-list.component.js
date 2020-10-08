@@ -4,6 +4,7 @@ import { Droppable } from "react-beautiful-dnd";
 
 // Component
 import CardItem from "../card-item/card-item.component";
+import SyncLoader from "react-spinners/SyncLoader";
 
 // Utilities
 import { convertToStringId } from "../utilities/convert-to-string-id.utility";
@@ -18,7 +19,7 @@ import BoardContext from '../BoardContext';
 
 const CardList = (props) => {
   const [addingItem, setAddingItem] = useState(false);
-  const { index, taskList, addItem } = props;
+  const { index, taskList, addItem, loading } = props;
   const { title } = taskList;
 
   const getListStyle = (isDraggingOver) => ({
@@ -61,6 +62,11 @@ const CardList = (props) => {
               {...provided.droppableProps}
             >
               <StyledTitleBar>
+                <SyncLoader
+                  size={5}
+                  margin={2}
+                  loading={loading}
+                ></SyncLoader>
                 <p>{title}</p>
                 <FontAwesomeIcon
                   icon={faTrash}
