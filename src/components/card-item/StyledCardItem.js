@@ -12,15 +12,19 @@ const StyledSpan = styled.span`
   padding: 1rem 0 1rem 1rem;
 `;
 
+const StyledIcons = styled.div`
+  display: none;
+`;
+
 const StyledTask = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-`;
 
-const StyledIcons = styled.div`
-  display: flex;
+  &:hover ${StyledIcons} {
+    display: flex;
+  }
 `;
 
 export { StyledInputText, StyledSpan, StyledTask, StyledIcons };

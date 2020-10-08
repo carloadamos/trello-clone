@@ -12,7 +12,7 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 // Styles
-import { StyledAddItem, StyledCardList, StyledTitleBar } from "./StyledCardList";
+import { StyledAddItem, StyledCardList, StyledTitleBar, StyledIcon } from "./StyledCardList";
 
 // Context
 import BoardContext from '../BoardContext';
@@ -68,11 +68,13 @@ const CardList = (props) => {
                   loading={loading}
                 ></SyncLoader>
                 <p>{title}</p>
-                <FontAwesomeIcon
-                  icon={faTrash}
-                  className="icon"
-                  onClick={() => value.removeList(index)}
-                ></FontAwesomeIcon>
+                <StyledIcon>
+                  <FontAwesomeIcon
+                    icon={faTrash}
+                    className="icon"
+                    onClick={() => value.removeList(index)}
+                  ></FontAwesomeIcon>
+                </StyledIcon>
               </StyledTitleBar>
               {taskList.tasks.map((item, index) => (
                 <CardItem

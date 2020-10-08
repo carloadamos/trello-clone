@@ -5,6 +5,10 @@ const StyledAddItem = styled.div`
   cursor: pointer;
 `;
 
+const StyledIcon = styled.div`
+  display: none;
+`;
+
 const StyledCardList = styled.div`
   background-color: #feb2b2;
   border-radius: 4px;
@@ -12,6 +16,10 @@ const StyledCardList = styled.div`
   margin: 0 0.75rem;
   min-width: 15rem;
   padding: 0.5rem;
+
+  &:hover ${StyledIcon} {
+    display: block;
+  }
 `;
 
 const StyledTitleBar = styled.div`
@@ -20,4 +28,4 @@ const StyledTitleBar = styled.div`
   align-items: center;
 `;
 
-export { StyledAddItem, StyledCardList, StyledTitleBar };
+export { StyledAddItem, StyledCardList, StyledTitleBar, StyledIcon };
