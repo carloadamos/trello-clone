@@ -8,7 +8,12 @@ import { convertToStringId } from "../utilities/convert-to-string-id.utility";
 // Styles
 import { faEdit, faMinus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { StyledIcons, StyledInputText, StyledSpan, StyledTask } from "./StyledCardItem";
+import {
+  StyledIcons,
+  StyledInputText,
+  StyledSpan,
+  StyledTask,
+} from "./StyledCardItem";
 
 // Context
 import BoardContext from "../BoardContext";

@@ -8,6 +8,7 @@ import { convertToStringId } from "../utilities/convert-to-string-id.utility";
 
 // Component
 import CardList from "../card-list/card-list.component";
+import Header from "../header/header.component";
 
 // Context
 import BoardContext from "../BoardContext";
@@ -257,6 +258,7 @@ const Board = () => {
 
   return (
     <BoardContext.Provider value={{ updateTask, removeTask, removeList }}>
+      <Header></Header>
       <DragDropContext onDragEnd={_onDragEnd}>
         <StyledBoard>
           <Droppable

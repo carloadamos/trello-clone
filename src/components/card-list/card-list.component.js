@@ -12,10 +12,15 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 // Styles
-import { StyledAddItem, StyledCardList, StyledTitleBar, StyledIcon } from "./StyledCardList";
+import {
+  StyledAddItem,
+  StyledCardList,
+  StyledTitleBar,
+  StyledIcon,
+} from "./StyledCardList";
 
 // Context
-import BoardContext from '../BoardContext';
+import BoardContext from "../BoardContext";
 
 const CardList = (props) => {
   const [addingItem, setAddingItem] = useState(false);
@@ -53,7 +58,7 @@ const CardList = (props) => {
 
   return (
     <BoardContext.Consumer>
-      {(value) =>
+      {(value) => (
         <Droppable droppableId={String(index)}>
           {(provided, snapshot) => (
             <StyledCardList
@@ -62,11 +67,7 @@ const CardList = (props) => {
               {...provided.droppableProps}
             >
               <StyledTitleBar>
-                <SyncLoader
-                  size={5}
-                  margin={2}
-                  loading={loading}
-                ></SyncLoader>
+                <SyncLoader size={5} margin={2} loading={loading}></SyncLoader>
                 <p>{title}</p>
                 <StyledIcon>
                   <FontAwesomeIcon
@@ -96,7 +97,7 @@ const CardList = (props) => {
             </StyledCardList>
           )}
         </Droppable>
-      }
+      )}
     </BoardContext.Consumer>
   );
 };
