@@ -14,7 +14,13 @@ import Header from "../header/header.component";
 import BoardContext from "../BoardContext";
 
 // Styles
-import { StyledBoard, StyledBoardList, StyledTitleInput, StyledAddButton } from './StyledBoard';
+import {
+  StyledBoard,
+  StyledBoardList,
+  StyledTitleInput,
+  StyledAddButton,
+  StyledMinContent,
+} from "./StyledBoard";
 
 const Board = () => {
   const [addList, setAddList] = useState(false);
@@ -43,12 +49,12 @@ const Board = () => {
         return;
       }
     }
-  }
+  };
 
   const removeList = (index) => {
     board[0].list.splice(index, 1);
     _updateBoard(board[0]);
-  }
+  };
 
   /**
    * Render add button and text field.
@@ -57,20 +63,15 @@ const Board = () => {
     return (
       <div>
         {addList ? (
-          <StyledTitleInput
-            type="text"
-            onKeyDown={_handleKeyDown}
-          />
+          <StyledTitleInput type="text" onKeyDown={_handleKeyDown} />
         ) : (
-            <StyledAddButton
-              onClick={() => setAddList(true)}
-            >
-              Add list
-            </StyledAddButton>
-          )}
+          <StyledAddButton onClick={() => setAddList(true)}>
+            Add list
+          </StyledAddButton>
+        )}
       </div>
     );
-  }
+  };
 
   /**
    * Add item to the list.
@@ -152,7 +153,7 @@ const Board = () => {
     if (event.key === "Escape") {
       setAddList(false);
     }
-  }
+  };
 
   /**
    * Fetch board.
@@ -164,12 +165,17 @@ const Board = () => {
         setBoard(data);
       })
       .catch((err) => console.error(`Error fetching data: ${err}`));
-  }
+  };
 
   /**
    * Moves an item from one list to another list.
    */
-  const _move = (source, destination, droppableSource, droppableDestination) => {
+  const _move = (
+    source,
+    destination,
+    droppableSource,
+    droppableDestination
+  ) => {
     const sourceClone = Array.from(source);
     const destClone = Array.from(destination);
     const [removed] = sourceClone.splice(droppableSource.index, 1);
@@ -195,11 +201,7 @@ const Board = () => {
 
     if (result.type === "droppableItem") {
       let tempBoard = board[0];
-      const items = _reorder(
-        board[0].list,
-        source.index,
-        destination.index
-      );
+      const items = _reorder(board[0].list, source.index, destination.index);
 
       tempBoard.list = items;
     } else {
@@ -270,28 +272,31 @@ const Board = () => {
               <StyledBoardList ref={provided.innerRef}>
                 {Object.keys(board).length !== 0 &&
                   board[0].list.map((taskList, index) => (
-                    <Draggable
-                      draggableId={String(index)}
-                      index={index}
-                      key={index}
-                    >
-                      {(provided, snapshot) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                        >
-                          <CardList
-                            addItem={addItem}
-                            key={index}
-                            index={index}
-                            taskList={taskList}
-                            loading={loading}
-                          />
-                          {provided.placeholder}
-                        </div>
-                      )}
-                    </Draggable>
+                    <StyledMinContent>
+                      <Draggable
+                        className="vertical-list"
+                        draggableId={String(index)}
+                        index={index}
+                        key={index}
+                      >
+                        {(provided, snapshot) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                          >
+                            <CardList
+                              addItem={addItem}
+                              key={index}
+                              index={index}
+                              taskList={taskList}
+                              loading={loading}
+                            />
+                            {provided.placeholder}
+                          </div>
+                        )}
+                      </Draggable>
+                    </StyledMinContent>
                   ))}
                 {provided.placeholder}
               </StyledBoardList>
@@ -302,6 +307,6 @@ const Board = () => {
       </DragDropContext>
     </BoardContext.Provider>
   );
-}
+};
 
 export default Board;

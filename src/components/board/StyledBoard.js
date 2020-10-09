@@ -39,4 +39,8 @@ const StyledAddButton = styled.div`
   }
 `;
 
-export { StyledBoard, StyledBoardList, StyledTitleInput, StyledAddButton };
+const StyledMinContent = styled.div`
+  height: min-content;
+`;
+
+export { StyledBoard, StyledBoardList, StyledTitleInput, StyledAddButton, StyledMinContent };
