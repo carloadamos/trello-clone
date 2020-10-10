@@ -8,8 +8,9 @@ import SyncLoader from "react-spinners/SyncLoader";
 
 // Utilities
 import { convertToStringId } from "../utilities/convert-to-string-id.utility";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 // Styles
 import {
@@ -17,6 +18,7 @@ import {
   StyledCardList,
   StyledTitleBar,
   StyledIcon,
+  StyledInlineIcon,
 } from "./StyledCardList";
 
 // Context
@@ -92,7 +94,20 @@ const CardList = (props) => {
                   setAddingItem(true);
                 }}
               >
-                {!addingItem ? <p>Add item</p> : _renderInputField()}
+                {!addingItem ? (
+                  <div>
+                    <StyledInlineIcon>
+                      <FontAwesomeIcon
+                        icon={faPlus}
+                        color="#F7FAFC"
+                        className="icon"
+                      ></FontAwesomeIcon>
+                      <p>Add another task</p>
+                    </StyledInlineIcon>
+                  </div>
+                ) : (
+                  _renderInputField()
+                )}
               </StyledAddItem>
             </StyledCardList>
           )}

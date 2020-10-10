@@ -272,12 +272,11 @@ const Board = () => {
               <StyledBoardList ref={provided.innerRef}>
                 {Object.keys(board).length !== 0 &&
                   board[0].list.map((taskList, index) => (
-                    <StyledMinContent>
+                    <StyledMinContent key={index}>
                       <Draggable
                         className="vertical-list"
                         draggableId={String(index)}
                         index={index}
-                        key={index}
                       >
                         {(provided, snapshot) => (
                           <div
