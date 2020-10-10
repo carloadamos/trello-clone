@@ -1,13 +1,13 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 const StyledHeader = styled.div`
-  align-items: center;
-  background-color: #fc8181;
-  color: white;
-  display: flex;
-  height: 50px;
-  justify-content: center;
-  text-align: center;
+    align-items: center;
+    background-color: #fc8181;
+    color: white;
+    display: flex;
+    height: 50px;
+    justify-content: center;
+    text-align: center;
 `;
 
 export { StyledHeader };
