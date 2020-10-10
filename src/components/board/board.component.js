@@ -243,8 +243,8 @@ const Board = () => {
         setLoading(true);
         axios
             .put(`http://localhost:5000/board/update/${board._id}`, board)
-            .then(() => setLoading(false))
-            .catch((err) => console.error(`Error fetching data: ${err}`));
+            .catch((err) => console.error(`Error fetching data: ${err}`))
+            .finally(() => setLoading(false));
     };
 
     return (
