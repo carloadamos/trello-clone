@@ -1,8 +1,8 @@
 import { createContext } from 'react';
 
 const BoardContext = createContext({
-    updateTask: () => {},
-    removeTask: () => {}
+  updateTask: () => {},
+  removeTask: () => {}
 });
 
 export default BoardContext;

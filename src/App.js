@@ -8,15 +8,15 @@ import Board from './components/board/board.component';
 import './styles/style.css';
 
 function App() {
-    return (
-        <div className="App">
-            <header className="App-header">
-                <div className="center">
-                    <Board />
-                </div>
-            </header>
+  return (
+    <div className="App">
+      <header className="App-header">
+        <div className="center">
+          <Board />
         </div>
-    );
+      </header>
+    </div>
+  );
 }
 
 export default App;
