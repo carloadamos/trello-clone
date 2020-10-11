@@ -10,21 +10,6 @@ const StyledBoardList = styled.div`
   flex-wrap: wrap;
 `;
 
-const StyledTitleInput = styled.input.attrs({
-  type: 'text'
-})`
-  border-radius: 5px;
-  border: 1px solid #fc8181;
-  padding: 0.5rem;
-
-  &:focus {
-    border-radius: 5px;
-    border: 1px solid #fc8181;
-    outline: none;
-    padding: 0.5rem;
-  }
-`;
-
 const StyledAddButton = styled.div`
   background-color: #fc8181; /* 400 */
   border: none;
@@ -43,4 +28,4 @@ const StyledMinContent = styled.div`
   height: min-content;
 `;
 
-export { StyledBoard, StyledBoardList, StyledTitleInput, StyledAddButton, StyledMinContent };
+export { StyledBoard, StyledBoardList, StyledAddButton, StyledMinContent };

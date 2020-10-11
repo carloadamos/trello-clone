@@ -1,13 +1,5 @@
 import styled from 'styled-components';
 
-const StyledInputText = styled.input.attrs({
-  type: 'text',
-  placeholder: 'A text'
-})`
-  padding: 1rem 0 1rem 1rem;
-  color: #c53030;
-`;
-
 const StyledSpan = styled.span`
   flex: 4;
   padding: 1rem;
@@ -30,4 +22,4 @@ const StyledTask = styled.div`
   }
 `;
 
-export { StyledInputText, StyledSpan, StyledTask, StyledIcons };
+export { StyledSpan, StyledTask, StyledIcons };

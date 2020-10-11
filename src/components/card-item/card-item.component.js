@@ -9,10 +9,11 @@ import { convertToStringId } from '../utilities/convert-to-string-id.utility';
 // Styles
 import { faEdit, faMinus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { StyledIcons, StyledInputText, StyledSpan, StyledTask } from './StyledCardItem';
+import { StyledIcons, StyledSpan, StyledTask } from './StyledCardItem';
 
 // Context
 import BoardContext from '../BoardContext';
+import { StyledInputText } from '../../styles/GenericStyledComponents';
 
 const CardItem = (props) => {
   const [isEditingTask, setEditingTask] = useState(false);
@@ -51,27 +52,27 @@ const CardItem = (props) => {
               {...provided.draggableProps}
               {...provided.dragHandleProps}
               style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}>
-              <StyledTask>
-                {isEditingTask ? (
-                  <StyledInputText
-                    defaultValue={item}
-                    onKeyDown={_handleKeyDown.bind(this, value, index, list)}></StyledInputText>
-                ) : (
+              {!isEditingTask ? (
+                <StyledTask>
                   <StyledSpan>{item}</StyledSpan>
-                )}
-                <StyledIcons>
-                  <FontAwesomeIcon
-                    icon={faEdit}
-                    className="icon"
-                    onClick={() => setEditingTask(true)}
-                  />
-                  <FontAwesomeIcon
-                    icon={faMinus}
-                    className="icon"
-                    onClick={() => value.removeTask(index, list)}
-                  />
-                </StyledIcons>
-              </StyledTask>
+                  <StyledIcons>
+                    <FontAwesomeIcon
+                      icon={faEdit}
+                      className="icon"
+                      onClick={() => setEditingTask(true)}
+                    />
+                    <FontAwesomeIcon
+                      icon={faMinus}
+                      className="icon"
+                      onClick={() => value.removeTask(index, list)}
+                    />
+                  </StyledIcons>
+                </StyledTask>
+              ) : (
+                <StyledInputText
+                  defaultValue={item}
+                  onKeyDown={_handleKeyDown.bind(this, value, index, list)}></StyledInputText>
+              )}
             </div>
           )}
         </Draggable>

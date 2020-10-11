@@ -14,13 +14,9 @@ import Header from '../header/header.component';
 import BoardContext from '../BoardContext';
 
 // Styles
-import {
-  StyledBoard,
-  StyledBoardList,
-  StyledTitleInput,
-  StyledAddButton,
-  StyledMinContent
-} from './StyledBoard';
+import { StyledBoard, StyledBoardList, StyledAddButton, StyledMinContent } from './StyledBoard';
+
+import { StyledInputText } from '../../styles/GenericStyledComponents';
 
 const Board = () => {
   const [addList, setAddList] = useState(false);
@@ -63,7 +59,7 @@ const Board = () => {
     return (
       <div>
         {addList ? (
-          <StyledTitleInput type="text" onKeyDown={_handleKeyDown} />
+          <StyledInputText type="text" onKeyDown={_handleKeyDown} />
         ) : (
           <StyledAddButton onClick={() => setAddList(true)}>Add list</StyledAddButton>
         )}

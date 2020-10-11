@@ -21,6 +21,8 @@ import {
   StyledInlineIcon
 } from './StyledCardList';
 
+import { StyledInputText } from '../../styles/GenericStyledComponents';
+
 // Context
 import BoardContext from '../BoardContext';
 
@@ -40,7 +42,7 @@ const CardList = (props) => {
    * Render textbox for adding new task.
    */
   const _renderInputField = () => {
-    return <input type="text" onKeyDown={_handleKeyDown} />;
+    return <StyledInputText onKeyDown={_handleKeyDown}></StyledInputText>;
   };
 
   /**
