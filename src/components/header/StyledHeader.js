@@ -8,6 +8,10 @@ const StyledHeader = styled.div`
   height: 50px;
   justify-content: center;
   text-align: center;
+
+  span {
+    margin-right: 1rem;
+  }
 `;
 
 export { StyledHeader };

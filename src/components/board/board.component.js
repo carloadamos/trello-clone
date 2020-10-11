@@ -154,12 +154,14 @@ const Board = () => {
    * Fetch board.
    */
   const _fetchBoard = () => {
+    setLoading(true);
     axios
       .get(`http://localhost:5000/board`)
       .then(({ data }) => {
         setBoard(data);
       })
-      .catch((err) => console.error(`Error fetching data: ${err}`));
+      .catch((err) => console.error(`Error fetching data: ${err}`))
+      .finally(() => setLoading(false));
   };
 
   /**
@@ -249,7 +251,7 @@ const Board = () => {
 
   return (
     <BoardContext.Provider value={{ updateTask, removeTask, removeList }}>
-      <Header></Header>
+      <Header loading={loading}></Header>
       <DragDropContext onDragEnd={_onDragEnd}>
         <StyledBoard>
           <Droppable droppableId="droppable" type="droppableItem" direction="horizontal">
