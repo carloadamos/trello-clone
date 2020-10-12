@@ -9,6 +9,8 @@ import { convertToStringId } from '../utilities/convert-to-string-id.utility';
 // Component
 import CardList from '../card-list/card-list.component';
 import Header from '../header/header.component';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 // Context
 import BoardContext from '../BoardContext';
@@ -61,7 +63,10 @@ const Board = () => {
         {addList ? (
           <StyledInputText type="text" onKeyDown={_handleKeyDown} />
         ) : (
-          <StyledAddButton onClick={() => setAddList(true)}>Add list</StyledAddButton>
+          <StyledAddButton onClick={() => setAddList(true)}>
+            <FontAwesomeIcon icon={faPlus} className="icon" />
+            <span>Add another list</span>
+          </StyledAddButton>
         )}
       </div>
     );

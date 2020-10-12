@@ -14,8 +14,9 @@ const StyledAddButton = styled.div`
   background-color: #fc8181; /* 400 */
   border: none;
   color: #fff6f5; /* 100 */
-  margin-left: 0.75rem;
-  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  padding: 0 1rem 0 0.5rem;
   text-align: center;
 
   &:hover {
