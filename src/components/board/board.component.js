@@ -10,7 +10,7 @@ import { convertToStringId } from '../utilities/convert-to-string-id.utility';
 import CardList from '../card-list/card-list.component';
 import Header from '../header/header.component';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faTimes, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 // Context
 import BoardContext from '../BoardContext';
@@ -18,12 +18,18 @@ import BoardContext from '../BoardContext';
 // Styles
 import { StyledBoard, StyledBoardList, StyledAddButton, StyledMinContent } from './StyledBoard';
 
-import { StyledInputText } from '../../styles/GenericStyledComponents';
+import {
+  PlainRow,
+  StyledInputText,
+  StyledButton,
+  StyledCard
+} from '../../styles/GenericStyledComponents';
 
 const Board = () => {
   const [addList, setAddList] = useState(false);
   const [board, setBoard] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [newList, setNewList] = useState('');
 
   useEffect(() => {
     _fetchBoard();
@@ -61,7 +67,19 @@ const Board = () => {
     return (
       <div>
         {addList ? (
-          <StyledInputText type="text" onKeyDown={_handleKeyDown} />
+          <StyledCard backgroundColor={'#FFF'}>
+            <StyledInputText type="text" onKeyUp={_handleKeyUp} />
+            <PlainRow gap={'0 0.5rem'}>
+              <StyledButton
+                borderRadius={'4px'}
+                margin={'0.5rem 0'}
+                onClick={() => _addList(newList)}
+                primary>
+                <span>Add</span>
+              </StyledButton>
+              <FontAwesomeIcon icon={faTimes} className="icon" onClick={() => setAddList(false)} />
+            </PlainRow>
+          </StyledCard>
         ) : (
           <StyledAddButton onClick={() => setAddList(true)}>
             <FontAwesomeIcon icon={faPlus} className="icon" />
@@ -140,7 +158,9 @@ const Board = () => {
    * Kydown handler.
    * @param {Object} event Event object.
    */
-  const _handleKeyDown = (event) => {
+  const _handleKeyUp = (event) => {
+    setNewList(event.target.value);
+
     if (event.key === 'Enter') {
       _addList(event.target.value);
       setAddList(false);

@@ -16,4 +16,34 @@ const StyledInputText = styled.input.attrs({
   }
 `;
 
-export { StyledInputText };
+const StyledButton = styled.div`
+  background-color: ${(props) => (props.primary ? '#fc8181' : '#feb2b2')};
+  border: none;
+  border-radius: ${(props) => (props.borderRadius ? props.borderRadius : 0)};
+  color: #fff6f5; /* 100 */
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  margin: ${(props) => (props.margin ? props.margin : 0)};
+  text-align: center;
+  width: min-content;
+
+  &:hover {
+    cursor: pointer;
+    background-color: #f56565; /* 500 */
+  }
+`;
+
+const StyledCard = styled.div`
+  background-color: ${(props) => (props.backgroundColor ? props.backgroundColor : '#F7FAFC')};
+  border-radius: ${(props) => (props.borderRadius ? props.borderRadius : 0)};
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+  padding: 1rem;
+`;
+
+const PlainRow = styled.div`
+  display: flex;
+  gap: ${(props) => (props.gap ? props.gap : 0)};
+`;
+
+export { StyledInputText, StyledButton, StyledCard, PlainRow };
