@@ -10,7 +10,7 @@ import CardItem from '../card-item/card-item.component';
 import { convertToStringId } from '../utilities/convert-to-string-id.utility';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faTimes, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 // Styles
 import {
@@ -21,13 +21,20 @@ import {
   StyledInlineIcon
 } from './StyledCardList';
 
-import { StyledInputText } from '../../styles/GenericStyledComponents';
+// Generic Styles
+import {
+  PlainRow,
+  StyledInputText,
+  StyledButton,
+  StyledCard
+} from '../../styles/GenericStyledComponents';
 
 // Context
 import BoardContext from '../BoardContext';
 
 const CardList = (props) => {
   const [addingItem, setAddingItem] = useState(false);
+  const [newTask, setNewTask] = useState('');
   const { index, taskList, addItem } = props;
   const { title } = taskList;
 
@@ -42,16 +49,35 @@ const CardList = (props) => {
    * Render textbox for adding new task.
    */
   const _renderInputField = () => {
-    return <StyledInputText onKeyDown={_handleKeyDown}></StyledInputText>;
+    return (
+      <StyledCard backgroundColor={'#FFF'}>
+        <StyledInputText type="text" onKeyUp={_handleKeyUp} />
+        <PlainRow gap={'0 0.5rem'}>
+          <StyledButton
+            borderRadius={'4px'}
+            margin={'0.5rem 0'}
+            onClick={() => {
+              addItem(index, newTask);
+              setAddingItem(false);
+            }}
+            primary>
+            <span>Add</span>
+          </StyledButton>
+          <FontAwesomeIcon icon={faTimes} className="icon" onClick={() => setAddingItem(false)} />
+        </PlainRow>
+      </StyledCard>
+    );
   };
 
   /**
    * Kydown handler.
    * @param {Object} event Event object.
    */
-  const _handleKeyDown = (event) => {
+  const _handleKeyUp = (event) => {
+    setNewTask(event.target.value);
+
     if (event.key === 'Enter') {
-      addItem(index, event.target.value);
+      addItem(index, newTask);
       setAddingItem(false);
     }
 
@@ -78,16 +104,16 @@ const CardList = (props) => {
                     onClick={() => value.removeList(index)}></FontAwesomeIcon>
                 </StyledIcon>
               </StyledTitleBar>
+
               {taskList.tasks.map((item, index) => (
                 <CardItem key={convertToStringId(item)} item={item} index={index} list={title} />
               ))}
-              {provided.placeholder}
 
-              <StyledAddItem
-                onClick={() => {
-                  setAddingItem(true);
-                }}>
-                {!addingItem ? (
+              {!addingItem ? (
+                <StyledAddItem
+                  onClick={() => {
+                    setAddingItem(true);
+                  }}>
                   <div>
                     <StyledInlineIcon>
                       <FontAwesomeIcon
@@ -97,10 +123,12 @@ const CardList = (props) => {
                       <p>Add another task</p>
                     </StyledInlineIcon>
                   </div>
-                ) : (
-                  _renderInputField()
-                )}
-              </StyledAddItem>
+                </StyledAddItem>
+              ) : (
+                _renderInputField()
+              )}
+
+              {provided.placeholder}
             </StyledCardList>
           )}
         </Droppable>
