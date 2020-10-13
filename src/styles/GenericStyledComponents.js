@@ -26,7 +26,7 @@ const StyledButton = styled.div`
   padding: 0.5rem 1rem;
   margin: ${(props) => (props.margin ? props.margin : 0)};
   text-align: center;
-  width: min-content;
+  width: ${(props) => (props.width ? props.width : 'min-content')};
 
   &:hover {
     cursor: pointer;

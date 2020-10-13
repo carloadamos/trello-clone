@@ -9,6 +9,7 @@ import { convertToStringId } from '../utilities/convert-to-string-id.utility';
 // Component
 import CardList from '../card-list/card-list.component';
 import Header from '../header/header.component';
+import BoardHeader from '../board-header/board-header.component';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faPlus } from '@fortawesome/free-solid-svg-icons';
 
@@ -273,6 +274,7 @@ const Board = () => {
   return (
     <BoardContext.Provider value={{ updateTask, removeTask, removeList }}>
       <Header loading={loading}></Header>
+      <BoardHeader></BoardHeader>
       <DragDropContext onDragEnd={_onDragEnd}>
         <StyledBoard>
           <Droppable droppableId="droppable" type="droppableItem" direction="horizontal">
