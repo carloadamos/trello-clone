@@ -59,8 +59,7 @@ const CardList = (props) => {
             onClick={() => {
               addItem(index, newTask);
               setAddingItem(false);
-            }}
-            primary>
+            }}>
             <span>Add</span>
           </StyledButton>
           <FontAwesomeIcon icon={faTimes} className="icon" onClick={() => setAddingItem(false)} />

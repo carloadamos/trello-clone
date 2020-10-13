@@ -17,10 +17,10 @@ const StyledInputText = styled.input.attrs({
 `;
 
 const StyledButton = styled.div`
-  background-color: ${(props) => (props.primary ? '#fc8181' : '#feb2b2')};
+  background-color: ${(props) => (props.backgroundColor ? props.backgroundColor : '#fc8181')};
   border: none;
   border-radius: ${(props) => (props.borderRadius ? props.borderRadius : 0)};
-  color: #fff6f5; /* 100 */
+  color: ${(props) => (props.color ? props.color : '#fff')};
   display: flex;
   align-items: center;
   padding: 0.5rem 1rem;

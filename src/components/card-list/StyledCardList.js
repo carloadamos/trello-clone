@@ -23,7 +23,7 @@ const StyledCardList = styled.div`
   border-radius: 4px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   color: black;
-  margin: 0 0.75rem;
+  margin-right: 0.75rem;
   min-width: 18rem;
   padding: 0.5rem;
 

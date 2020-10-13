@@ -1,8 +1,9 @@
 import style from 'styled-components';
 
 const StyledBoardHeader = style.div`
-  background-color: white;
-  padding: 0 0.75rem;
+  background-color: rgba(255, 255, 255, 0.25);
+  margin-top: 1rem;
+  padding: 0 1.5rem;
 `;
 
 export { StyledBoardHeader };
