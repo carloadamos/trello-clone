@@ -43,6 +43,7 @@ const StyledCard = styled.div`
 
 const PlainRow = styled.div`
   display: flex;
+  justify-content: ${(props) => (props.justifyContent ? props.justifyContent : 'flex-start')};
   gap: ${(props) => (props.gap ? props.gap : 0)};
 `;
 
