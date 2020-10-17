@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 // Package
 import React, { useEffect, useState } from 'react';
 import { Draggable, DragDropContext, Droppable } from 'react-beautiful-dnd';
@@ -31,6 +32,7 @@ const Board = () => {
   const [board, setBoard] = useState([]);
   const [loading, setLoading] = useState(false);
   const [newList, setNewList] = useState('');
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     _fetchBoard();
@@ -203,6 +205,21 @@ const Board = () => {
     return result;
   };
 
+  const InputModal = (props) => {
+    return props.show ? (
+      <div id="modal">
+        <section className="modal-content">
+          <div className="modal-header">
+            Header
+            <FontAwesomeIcon icon={faTimes} className="icon" onClick={() => setShowModal(false)} />
+          </div>
+          <div className="modal-body">Body</div>
+          <div className="modal-footer">Footer</div>
+        </section>
+      </div>
+    ) : null;
+  };
+
   /**
    * Set of procedure to perform when draggin ends.
    * @param {Object} result Result of dragging
@@ -271,10 +288,15 @@ const Board = () => {
       .finally(() => setLoading(false));
   };
 
+  const toggleShowModal = () => {
+    setShowModal(true);
+  };
+
   return (
     <BoardContext.Provider value={{ updateTask, removeTask, removeList }}>
+      <InputModal show={showModal}></InputModal>
       <Header loading={loading}></Header>
-      <BoardHeader></BoardHeader>
+      <BoardHeader handleShowModal={toggleShowModal}></BoardHeader>
       <DragDropContext onDragEnd={_onDragEnd}>
         <StyledBoard>
           <Droppable droppableId="droppable" type="droppableItem" direction="horizontal">
